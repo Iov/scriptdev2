@@ -121,6 +121,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
     uint32 m_uiPurgentBlightTimer;
     uint32 m_uiGasSporeTimer;
     uint32 m_uiGasSporeExplodeTimer;
+    uint32 m_uiInhalteBlightTimer;
     uint64 m_uiBlightTargetGUID;
     uint64 m_uiGasSporeTargetGUID[3];
 //    uint64 pPuddleStalkerGUID[3];
@@ -136,10 +137,11 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
         m_uiBerserkTimer = 6*MINUTE*IN_MILLISECONDS;
         m_uiGastricBloatTimer = 10*IN_MILLISECONDS;
         m_uiVileGasTimer = 40*IN_MILLISECONDS;
-        m_uiGaseosBlightTimer = 30*IN_MILLISECONDS;
+        m_uiGaseosBlightTimer = 0*IN_MILLISECONDS;
         m_uiPurgentBlightTimer = 130*IN_MILLISECONDS;
         m_uiGasSporeTimer = 20*IN_MILLISECONDS;
         m_uiGasSporeExplodeTimer = 12*IN_MILLISECONDS;
+        m_uiInhalteBlightTimer = 30*IN_MILLISECONDS;
         m_uiBlightTargetGUID = 0;
 
         for (uint8 i = 0; i < 3; ++i)
@@ -172,7 +174,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
              }
 */
 
-        if (Creature* pBlightTarget = GetClosestCreatureWithEntry(m_creature, NPC_BLIGHT_STALKER, 60.0f))
+        if (Creature* pBlightTarget = GetClosestCreatureWithEntry(m_creature, NPC_BLIGHT_STALKER, 120.0f))
         {
             if (!pBlightTarget->isAlive())
                 pBlightTarget->Respawn();
@@ -235,14 +237,19 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_FESTERGUT, IN_PROGRESS);
 
-        if (Creature* pBlightTarget = m_creature->GetMap()->GetCreature(m_uiBlightTargetGUID))
+        if (Creature* pBlightTarget = GetClosestCreatureWithEntry(m_creature, NPC_BLIGHT_STALKER, 120.0f))
         {
-            DoCast(pBlightTarget, SPELL_BLIGHT_VISUAL_3);
-            DoCast(pBlightTarget, SPELL_BLIGHT_VISUAL_2);
-            DoCast(pBlightTarget, SPELL_BLIGHT_VISUAL_1);
-        }
+            if (!pBlightTarget->isAlive())
+                pBlightTarget->Respawn();
 
-        DoCast(m_creature, SPELL_GASEOUS_BLIGHT_1);
+            m_uiBlightTargetGUID = pBlightTarget->GetGUID();
+
+            pBlightTarget->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            pBlightTarget->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
+            pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
+            pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
+        }
 
 /*        for(uint8 i = 0; i < 3; ++i)
              if (pPuddleStalkerGUID[i])
@@ -377,6 +384,13 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
+        m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
+        m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
+        m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
+        RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_1);
+        RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_2);
+        RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_3);
+
         switch (m_uiMode)
         {
             case RAID_DIFFICULTY_10MAN_NORMAL:
@@ -415,7 +429,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
                 break;
         }
 
-        if (m_uiGaseosBlightTimer < uiDiff)
+        if (m_uiInhalteBlightTimer < uiDiff)
         {
             switch (urand(0,2))
             {
@@ -432,32 +446,63 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
 
             DoCast(m_creature, SPELL_INHALE_BLIGHT);
 
+            m_uiInhalteBlightTimer = 40*IN_MILLISECONDS;
+            m_uiGaseosBlightTimer = 3.5*IN_MILLISECONDS;
+        }
+        else
+            m_uiInhalteBlightTimer -= uiDiff;
+
+        if (m_uiGaseosBlightTimer < uiDiff)
+        {
             switch (m_uiInhaleCount)
             {
                 case 0:
                     if (Creature* pBlightTarget = m_creature->GetMap()->GetCreature(m_uiBlightTargetGUID))
                     {
-                        m_creature->RemoveAurasDueToSpell(SPELL_GASEOUS_BLIGHT_1);
+                        DoCast(m_creature, SPELL_GASEOUS_BLIGHT_1);
                         pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
-                        DoCast(m_creature, SPELL_GASEOUS_BLIGHT_2);
-                        m_uiGaseosBlightTimer = 30*IN_MILLISECONDS;
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
+                        pBlightTarget->CastSpell(pBlightTarget, SPELL_BLIGHT_VISUAL_1, false);
+                        m_uiInhalteBlightTimer = 30*IN_MILLISECONDS;
+                        m_uiGaseosBlightTimer= 35*IN_MILLISECONDS;
                     }
                     break;
                 case 1:
                     if (Creature* pBlightTarget = m_creature->GetMap()->GetCreature(m_uiBlightTargetGUID))
                     {
-                        m_creature->RemoveAurasDueToSpell(SPELL_GASEOUS_BLIGHT_2);
+                        m_creature->RemoveAurasDueToSpell(SPELL_GASEOUS_BLIGHT_1);
+                        DoCast(m_creature, SPELL_GASEOUS_BLIGHT_2);
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
                         pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
-                        DoCast(m_creature, SPELL_GASEOUS_BLIGHT_3);
-                        m_uiGaseosBlightTimer = 30*IN_MILLISECONDS;
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
+                        pBlightTarget->CastSpell(pBlightTarget, SPELL_BLIGHT_VISUAL_2, false);
+                        m_uiInhalteBlightTimer = 30*IN_MILLISECONDS;
+                        m_uiGaseosBlightTimer= 35*IN_MILLISECONDS;
                     }
                     break;
                 case 2:
                     if (Creature* pBlightTarget = m_creature->GetMap()->GetCreature(m_uiBlightTargetGUID))
                     {
-                        m_creature->RemoveAurasDueToSpell(SPELL_GASEOUS_BLIGHT_3);
+                        m_creature->RemoveAurasDueToSpell(SPELL_GASEOUS_BLIGHT_2);
+                        DoCast(m_creature, SPELL_GASEOUS_BLIGHT_3);
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
                         pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
-                        m_uiGaseosBlightTimer = 70*IN_MILLISECONDS;
+                        pBlightTarget->CastSpell(pBlightTarget, SPELL_BLIGHT_VISUAL_3, false);
+                        m_uiInhalteBlightTimer = 30*IN_MILLISECONDS;
+                        m_uiGaseosBlightTimer= 35*IN_MILLISECONDS;
+                    }
+                    break;
+                case 3:
+                    if (Creature* pBlightTarget = m_creature->GetMap()->GetCreature(m_uiBlightTargetGUID))
+                    {
+                        m_creature->RemoveAurasDueToSpell(SPELL_GASEOUS_BLIGHT_3);
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
+                        pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
+                        m_uiInhalteBlightTimer = 70*IN_MILLISECONDS;
+                        m_uiGaseosBlightTimer= 75*IN_MILLISECONDS;
                         m_uiPurgentBlightTimer = 40*IN_MILLISECONDS;
                     }
                     break;
@@ -493,24 +538,10 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
             }
 
             m_creature->RemoveAurasDueToSpell(SPELL_INHALED_BLIGHT);
-            m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
-            m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
-            m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
-
-            if (Creature* pBlightTarget = m_creature->GetMap()->GetCreature(m_uiBlightTargetGUID))
-            {
-                DoCast(pBlightTarget, SPELL_BLIGHT_VISUAL_3);
-                DoCast(pBlightTarget, SPELL_BLIGHT_VISUAL_2);
-                DoCast(pBlightTarget, SPELL_BLIGHT_VISUAL_1);
-            }
-
             RemoveAuraFromAll(SPELL_INOCULATE);
-            RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_3);
-            RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_2);
-            RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_1);
-            DoCast(m_creature, SPELL_GASEOUS_BLIGHT_1);
 
-            m_uiGaseosBlightTimer = 30*IN_MILLISECONDS;
+            m_uiGaseosBlightTimer = 3*IN_MILLISECONDS;
+            m_uiInhaleCount = 0;
             m_uiPurgentBlightTimer = 130*IN_MILLISECONDS;
             m_uiGasSporeTimer = 20*IN_MILLISECONDS;
         }
