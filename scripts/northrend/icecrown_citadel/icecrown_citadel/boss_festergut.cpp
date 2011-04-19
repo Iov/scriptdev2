@@ -181,6 +181,9 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
 
             pBlightTarget->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             pBlightTarget->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
+            pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
+            pBlightTarget->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
         }
     }
 
@@ -381,7 +384,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
                     if (m_creature->getVictim()->GetAura(SPELL_GASTRIC_BLOAT_10_N, EFFECT_INDEX_1)->GetStackAmount() > 9)
                     {
                         m_creature->getVictim()->RemoveAurasDueToSpell(SPELL_GASTRIC_BLOAT_10_N);
-                        DoCast(m_creature->getVictim(), SPELL_GASTRIC_EXPLOSION_10_N);
+                        m_creature->getVictim()->CastSpell(m_creature->getVictim(), SPELL_GASTRIC_EXPLOSION_10_N, false);
                     }
                 break;
             case RAID_DIFFICULTY_10MAN_HEROIC:
@@ -389,7 +392,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
                     if (m_creature->getVictim()->GetAura(SPELL_GASTRIC_BLOAT_10_H, EFFECT_INDEX_1)->GetStackAmount() > 9)
                     {
                         m_creature->getVictim()->RemoveAurasDueToSpell(SPELL_GASTRIC_BLOAT_10_H);
-                        DoCast(m_creature->getVictim(), SPELL_GASTRIC_EXPLOSION_10_H);
+                        m_creature->getVictim()->CastSpell(m_creature->getVictim(), SPELL_GASTRIC_EXPLOSION_10_H, false);
                     }
                 break;
             case RAID_DIFFICULTY_25MAN_NORMAL:
@@ -397,7 +400,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
                     if (m_creature->getVictim()->GetAura(SPELL_GASTRIC_BLOAT_25_N, EFFECT_INDEX_1)->GetStackAmount() > 9)
                     {
                         m_creature->getVictim()->RemoveAurasDueToSpell(SPELL_GASTRIC_BLOAT_25_N);
-                        DoCast(m_creature->getVictim(), SPELL_GASTRIC_EXPLOSION_25_N);
+                        m_creature->getVictim()->CastSpell(m_creature->getVictim(), SPELL_GASTRIC_EXPLOSION_25_N, false);
                     }
                 break;
             case RAID_DIFFICULTY_25MAN_HEROIC:
@@ -405,7 +408,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
                     if (m_creature->getVictim()->GetAura(SPELL_GASTRIC_BLOAT_25_H, EFFECT_INDEX_1)->GetStackAmount() > 9)
                     {
                         m_creature->getVictim()->RemoveAurasDueToSpell(SPELL_GASTRIC_BLOAT_25_H);
-                        DoCast(m_creature->getVictim(), SPELL_GASTRIC_EXPLOSION_25_H);
+                        m_creature->getVictim()->CastSpell(m_creature->getVictim(), SPELL_GASTRIC_EXPLOSION_25_H, false);
                     }
                 break;
             default:
@@ -490,6 +493,9 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
             }
 
             m_creature->RemoveAurasDueToSpell(SPELL_INHALED_BLIGHT);
+            m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_3);
+            m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_2);
+            m_creature->RemoveAurasDueToSpell(SPELL_BLIGHT_VISUAL_1);
 
             if (Creature* pBlightTarget = m_creature->GetMap()->GetCreature(m_uiBlightTargetGUID))
             {
@@ -499,6 +505,9 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
             }
 
             RemoveAuraFromAll(SPELL_INOCULATE);
+            RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_3);
+            RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_2);
+            RemoveAuraFromAll(SPELL_BLIGHT_VISUAL_1);
             DoCast(m_creature, SPELL_GASEOUS_BLIGHT_1);
 
             m_uiGaseosBlightTimer = 30*IN_MILLISECONDS;
