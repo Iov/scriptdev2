@@ -120,7 +120,6 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
     uint32 m_uiGaseosBlightTimer;
     uint32 m_uiPurgentBlightTimer;
     uint32 m_uiGasSporeTimer;
-    uint32 m_uiGasSporeExplodeTimer;
     uint32 m_uiInhalteBlightTimer;
     uint64 m_uiBlightTargetGUID;
     uint64 m_uiGasSporeTargetGUID[3];
@@ -135,12 +134,11 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
         m_bPet = false;
         m_uiInhaleCount = 0;
         m_uiBerserkTimer = 6*MINUTE*IN_MILLISECONDS;
-        m_uiGastricBloatTimer = 10*IN_MILLISECONDS;
+        m_uiGastricBloatTimer = 12*IN_MILLISECONDS;
         m_uiVileGasTimer = 40*IN_MILLISECONDS;
         m_uiGaseosBlightTimer = 0*IN_MILLISECONDS;
         m_uiPurgentBlightTimer = 130*IN_MILLISECONDS;
         m_uiGasSporeTimer = 20*IN_MILLISECONDS;
-        m_uiGasSporeExplodeTimer = 12*IN_MILLISECONDS;
         m_uiInhalteBlightTimer = 30*IN_MILLISECONDS;
         m_uiBlightTargetGUID = 0;
 
@@ -331,36 +329,6 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
         }
     }
 
-    void AddAuraToNearTargets(Unit* pSource, uint32 m_uiSpellId)
-    {
-        float m_fRange = 10.0f;
-        std::list<uint64> PetGuidList;
-
-        Map::PlayerList const& players = m_creature->GetMap()->GetPlayers();
-        for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-        {
-            if (Player* pPlayer = itr->getSource())
-            {
-                if (pPlayer->GetDistance(pSource) <= m_fRange)
-                    DoCast(pPlayer, m_uiSpellId);
-
-                if (Pet* pPet = pPlayer->GetPet())
-                    if (pPet->isAlive())
-                        PetGuidList.push_back(pPet->GetGUID());
-            }
-        }
-
-        if (PetGuidList.empty())
-            return;
-
-        for (std::list<uint64>::iterator itr = PetGuidList.begin(); itr != PetGuidList.end(); ++itr)
-            if (Pet* pPet = m_creature->GetMap()->GetPet(*itr))
-                if (pPet->GetDistance(pSource) <= m_fRange)
-                DoCast(pPet, m_uiSpellId);
-
-        PetGuidList.clear();
-    }
-
     void UpdateAI(const uint32 uiDiff)
     {
 
@@ -448,6 +416,7 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
 
             m_uiInhalteBlightTimer = 40*IN_MILLISECONDS;
             m_uiGaseosBlightTimer = 3.5*IN_MILLISECONDS;
+            m_uiGastricBloatTimer += 3.5*IN_MILLISECONDS;
         }
         else
             m_uiInhalteBlightTimer -= uiDiff;
@@ -541,62 +510,33 @@ struct MANGOS_DLL_DECL boss_festergutAI : public ScriptedAI
             RemoveAuraFromAll(SPELL_INOCULATE);
 
             m_uiGaseosBlightTimer = 3*IN_MILLISECONDS;
+            m_uiGastricBloatTimer += 3*IN_MILLISECONDS;
             m_uiInhaleCount = 0;
             m_uiPurgentBlightTimer = 130*IN_MILLISECONDS;
-            m_uiGasSporeTimer = 20*IN_MILLISECONDS;
+            m_uiGasSporeTimer = 23*IN_MILLISECONDS;
         }
         else
             m_uiPurgentBlightTimer -= uiDiff;
 
         if (m_uiGasSporeTimer < uiDiff)
         {
-            for (uint8 i = 0; i < m_uiGasSporeCount; ++i)
+            if (!m_creature->IsNonMeleeSpellCasted(false))
             {
-                if(Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                m_uiGasSporeTimer = 40*IN_MILLISECONDS;
+
+                for (uint8 i = 0; i < m_uiGasSporeCount; ++i)
                 {
-                    m_uiGasSporeTargetGUID[i] = pTarget->GetGUID();
-                    DoCast(pTarget, SPELL_GAS_SPORE);
-                    DoCast(pTarget, SPELL_SPORE_AURA_0);
+                    if(Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                    {
+                        m_uiGasSporeTargetGUID[i] = pTarget->GetGUID();
+                        DoCast(pTarget, SPELL_GAS_SPORE);
+                        DoCast(pTarget, SPELL_SPORE_AURA_0);
+                    }
                 }
             }
-
-            m_uiGasSporeTimer = 40*IN_MILLISECONDS;
         }
         else
             m_uiGasSporeTimer -= uiDiff;
-
-        if (m_uiGasSporeExplodeTimer < uiDiff)
-        {
-            for (uint8 i = 0; i < m_uiGasSporeCount; ++i)
-            {
-                if (Unit* pTarget = m_creature->GetMap()->GetUnit(m_uiGasSporeTargetGUID[i]))
-                {
-                    switch (m_uiMode)
-                    {
-                        case RAID_DIFFICULTY_10MAN_NORMAL:
-                            AddAuraToNearTargets(pTarget, SPELL_BLIGHTED_SPORES_10_N);
-                            break;
-                        case RAID_DIFFICULTY_10MAN_HEROIC:
-                            AddAuraToNearTargets(pTarget, SPELL_BLIGHTED_SPORES_10_H);
-                            break;
-                        case RAID_DIFFICULTY_25MAN_NORMAL:
-                            AddAuraToNearTargets(pTarget, SPELL_BLIGHTED_SPORES_25_N);
-                            break;
-                        case RAID_DIFFICULTY_25MAN_HEROIC:
-                            AddAuraToNearTargets(pTarget, SPELL_BLIGHTED_SPORES_25_H);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                m_uiGasSporeTargetGUID[i] = 0;
-            }
-
-            m_uiGasSporeExplodeTimer = 2*MINUTE*IN_MILLISECONDS;
-        }
-        else
-            m_uiGasSporeExplodeTimer -= uiDiff;
 
         if (m_uiGastricBloatTimer < uiDiff)
         {
