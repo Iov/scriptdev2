@@ -89,3 +89,7 @@ UPDATE `creature_template` SET `ScriptName` = 'mob_tribuna_controller' WHERE `en
 
 UPDATE `creature_template` SET `AIName` = 'NullAI' WHERE `entry` = '30282';
 
+-- Experience Eliminator
+
+UPDATE `creature_template` SET `ScriptName` = "npc_experience_eliminator" WHERE `entry` IN (35365,35364);
+
