@@ -2917,7 +2917,7 @@ struct MANGOS_DLL_DECL pet_spring_rabbitAI : public PetAI
     
     void SetClient(bool m_bValue)
     {
-        if (value)
+        if (m_bValue)
         {
             m_bIsInLove = m_bValue;
             m_bIsClient = m_bValue;
@@ -2928,7 +2928,7 @@ struct MANGOS_DLL_DECL pet_spring_rabbitAI : public PetAI
 
     void MoveInLineOfSight(Unit* pWho)
     {
-        if (!isInLove && !isClient && roll_chance_i(10))
+        if (!m_bIsInLove && !m_bIsClient && roll_chance_i(10))
         {
             if (m_creature->GetDistance(pWho) <= 6.0f)
             { 
@@ -2982,7 +2982,7 @@ struct MANGOS_DLL_DECL pet_spring_rabbitAI : public PetAI
                                 m_uiWaitTimer = 7000;
                             }
                             else
-                                m_uiwait_timer -= uiDiff;
+                                m_uiWaitTimer -= uiDiff;
 
                             break;
                         }
@@ -2996,7 +2996,7 @@ struct MANGOS_DLL_DECL pet_spring_rabbitAI : public PetAI
                                 m_uiPhase = 2;
                             }
                             else
-                                m_uilove_timer -= uiDiff;
+                                m_uiLoveTimer -= uiDiff;
 
                             break;
                         }
