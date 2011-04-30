@@ -97,3 +97,6 @@ UPDATE `creature_template` SET `ScriptName` = "npc_experience_eliminator" WHERE 
 
 UPDATE `creature_template` SET `ScriptName`='pet_spring_rabbit' WHERE `entry`='32791';
 
+-- World Boss Lethon
+
+UPDATE `creature_template` SET `ScriptName`='boss_lethon' WHERE `entry`='14888';
