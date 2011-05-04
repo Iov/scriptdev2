@@ -104,3 +104,8 @@ UPDATE `creature_template` SET `ScriptName`='boss_lethon' WHERE `entry`='14888';
 -- Childrens Week Orphans
 
 UPDATE `creature_template` SET `ScriptName`='pet_orphan' WHERE `entry` IN(33532,33533);
+
+-- Quest Cold Hearted
+
+UPDATE `creature_template` SET `ScriptName`='npc_brunnhildar_prisoner' WHERE `entry`='29639';
+UPDATE `creature_template` SET `ScriptName`='npc_freed_protodrake', `flags_extra`='4096' WHERE `entry`='29709';
