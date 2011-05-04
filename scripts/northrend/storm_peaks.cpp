@@ -27,6 +27,7 @@ npc_roxi_ramrocket
 npc_frostborn_scout
 npc_freed_protodrake
 npc_brunnhildar_prisoner
+npc_kirgaraak
 EndContentData */
 
 #include "precompiled.h"
@@ -390,6 +391,68 @@ CreatureAI* GetAI_npc_brunnhildar_prisoner(Creature* pCreature)
     return new npc_brunnhildar_prisonerAI(pCreature);
 }
 
+/*######
+## npc_kirgaraak
+######*/
+
+enum
+{
+    QUEST_THE_WARM_UP       = 12996,
+    NPC_KIRGARAAK_CREDIT    = 30221
+};
+
+struct MANGOS_DLL_DECL npc_kirgaraakAI : public ScriptedAI
+{
+    npc_kirgaraakAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    bool m_bKirgaraakBeaten;
+
+    void Reset()
+    {
+        m_bKirgaraakBeaten =  false;
+        m_creature->setFaction(m_creature->GetCreatureInfo()->faction_A);
+    }
+
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    {
+        if (uiDamage > m_creature->GetHealth() || (m_creature->GetHealth() - uiDamage)*100 / m_creature->GetMaxHealth() < 10)
+        {
+            if (Player* pPlayer = pDoneBy->GetCharmerOrOwnerPlayerOrPlayerItself())
+            {
+                if (!m_bKirgaraakBeaten && pPlayer->GetQuestStatus(QUEST_THE_WARM_UP) == QUEST_STATUS_INCOMPLETE)
+                {
+                    uiDamage = 0;
+                    
+                    m_creature->setFaction(35);
+                    m_creature->CombatStop(true);
+                    m_creature->RemoveAllAuras();
+                    m_creature->DeleteThreatList();
+                    pPlayer->KilledMonsterCredit(NPC_KIRGARAAK_CREDIT);
+                    m_bKirgaraakBeaten = true;
+                }
+            }
+        }
+    }
+
+    void MoveInLineOfSight(Unit* pWho) 
+    {
+        if (pWho->GetTypeId() == TYPEID_PLAYER)
+        {
+            if (pWho->hasUnitState(UNIT_STAT_ON_VEHICLE) && ((Player*)pWho)->GetQuestStatus(QUEST_THE_WARM_UP) == QUEST_STATUS_INCOMPLETE)
+            {
+                m_creature->setFaction(90);
+            }
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_kirgaraak(Creature* pCreature)
+{
+    return new npc_kirgaraakAI(pCreature);
+}
 
 void AddSC_storm_peaks()
 {
@@ -427,5 +490,10 @@ void AddSC_storm_peaks()
     newscript = new Script;
     newscript->Name = "npc_brunnhildar_prisoner";
     newscript->GetAI = &GetAI_npc_brunnhildar_prisoner;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_kirgaraak";
+    newscript->GetAI = &GetAI_npc_kirgaraak;
     newscript->RegisterSelf();
 }
