@@ -114,3 +114,8 @@ UPDATE `creature_template` SET `ScriptName`='npc_freed_protodrake', `flags_extra
 
 UPDATE `creature_template` SET `ScriptName`='npc_kirgaraak' WHERE `entry`='29352';
 UPDATE `creature_template` SET `spell1`='54459', `spell2`='54458', `spell3`='54460' WHERE `entry`='29918';
+
+-- Quest Plagued Lands
+
+UPDATE `creature_template` SET `ScriptName`='npc_captured_rabid_thistle_bear' WHERE `entry`='11836';
+UPDATE `creature_template` SET `ScriptName`='npc_rabid_thistle_bear' WHERE `entry`='2164';
