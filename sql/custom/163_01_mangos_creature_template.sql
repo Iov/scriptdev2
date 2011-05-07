@@ -135,3 +135,7 @@ UPDATE `creature_template` SET `ScriptName`='mob_scarlet_courier' WHERE `entry`=
 -- Instance Forge of Souls
 
 UPDATE `creature_template` SET `ScriptName`='npc_corrupted_soul_fragment' WHERE `entry`='36535';
+
+-- Quest The Might of the Horde
+
+UPDATE `creature_template` SET `ScriptName`='npc_warsong_battle_standart' WHERE `entry`='26678';
