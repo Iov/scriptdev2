@@ -119,3 +119,9 @@ UPDATE `creature_template` SET `spell1`='54459', `spell2`='54458', `spell3`='544
 
 UPDATE `creature_template` SET `ScriptName`='npc_captured_rabid_thistle_bear' WHERE `entry`='11836';
 UPDATE `creature_template` SET `ScriptName`='npc_rabid_thistle_bear' WHERE `entry`='2164';
+
+-- Instance Utgarde Pinnacle
+
+UPDATE `creature_template` SET `ScriptName` = 'npc_spectator' WHERE `entry` = '26667';
+UPDATE `creature_template` SET `AIName` = 'NUllAI' WHERE `entry` = '27327';
+UPDATE `creature_template` SET `ScriptName` = 'mob_spirit_fount' WHERE `entry` = '27339';
