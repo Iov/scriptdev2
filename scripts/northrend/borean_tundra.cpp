@@ -27,6 +27,7 @@ npc_iruk
 npc_kara_thricestar
 npc_nesingwary_trapper
 go_caribou_trap
+npc_sinkhole_kill_credit
 npc_surristrasz
 npc_tiare
 npc_lurgglbr
@@ -65,12 +66,12 @@ enum
 bool GossipHello_npc_fizzcrank_fullthrottle(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->isQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+        pPlayer->PrepareQuestMenu(pCreature->GetObjectGuid());
 
     if (pPlayer->GetQuestStatus(QUEST_THE_MECHAGNOMES) == QUEST_STATUS_INCOMPLETE)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TELL_ME, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
     return true;
 }
 
@@ -80,38 +81,38 @@ bool GossipSelect_npc_fizzcrank_fullthrottle(Player* pPlayer, Creature* pCreatur
     {
         case GOSSIP_ACTION_INFO_DEF+1:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GO_ON, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK1, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK1, pCreature->GetObjectGuid());
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GO_ON, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK2, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK2, pCreature->GetObjectGuid());
             break;
         case GOSSIP_ACTION_INFO_DEF+3:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GO_ON, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK3, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK3, pCreature->GetObjectGuid());
             break;
         case GOSSIP_ACTION_INFO_DEF+4:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GO_ON, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK4, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK4, pCreature->GetObjectGuid());
             break;
         case GOSSIP_ACTION_INFO_DEF+5:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GO_ON, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK5, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK5, pCreature->GetObjectGuid());
             break;
         case GOSSIP_ACTION_INFO_DEF+6:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GO_ON, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK6, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK6, pCreature->GetObjectGuid());
             break;
         case GOSSIP_ACTION_INFO_DEF+7:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GO_ON, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK7, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK7, pCreature->GetObjectGuid());
             break;
         case GOSSIP_ACTION_INFO_DEF+8:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GO_ON, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK8, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK8, pCreature->GetObjectGuid());
             break;
         case GOSSIP_ACTION_INFO_DEF+9:
-            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK9, pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXTID_FIZZCRANK9, pCreature->GetObjectGuid());
             pPlayer->AreaExploredOrEventHappens(QUEST_THE_MECHAGNOMES);
             break;
     }
@@ -135,7 +136,7 @@ bool GossipHello_npc_iruk(Player* pPlayer, Creature* pCreature)
     if (pPlayer->GetQuestStatus(QUEST_SPIRITS_WATCH_OVER_US) == QUEST_STATUS_INCOMPLETE)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_IRUK, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
     return true;
 }
 
@@ -171,7 +172,7 @@ bool GossipHello_npc_kara_thricestar(Player* pPlayer, Creature* pCreature)
     if (pPlayer->GetQuestStatus(QUEST_CHECK_IN_WITH_BIXIE) == QUEST_STATUS_COMPLETE)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_THRICESTAR2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
     return true;
 }
 
@@ -212,23 +213,23 @@ struct MANGOS_DLL_DECL npc_nesingwary_trapperAI : public ScriptedAI
 
     uint8 m_uiPhase;
     uint32 m_uiPhaseTimer;
-    uint64 m_uiPlayerGUID;
-    uint64 m_uiGobjectTrapGUID;
+    ObjectGuid m_playerGuid;
+    ObjectGuid m_trapGuid;
 
     void Reset()
     {
         m_uiPhase = 0;
         m_uiPhaseTimer = 0;
-        m_uiPlayerGUID = 0;
-        m_uiGobjectTrapGUID = 0;
+        m_playerGuid.Clear();
+        m_trapGuid.Clear();
     }
 
-    void StartAction(uint64 uiPlayerGUID, uint64 uiGoTrapGUID)
+    void StartAction(Player* pPlayer, GameObject* pTrap)
     {
         m_uiPhase = 1;
         m_uiPhaseTimer = 3000;
-        m_uiPlayerGUID = uiPlayerGUID;
-        m_uiGobjectTrapGUID = uiGoTrapGUID;
+        m_playerGuid = pPlayer->GetObjectGuid();
+        m_trapGuid = pTrap->GetObjectGuid();
 
         switch (urand(0, 3))
         {
@@ -248,20 +249,20 @@ struct MANGOS_DLL_DECL npc_nesingwary_trapperAI : public ScriptedAI
                 switch(m_uiPhase)
                 {
                     case 1:
-                        if (GameObject* pTrap = m_creature->GetMap()->GetGameObject(m_uiGobjectTrapGUID))
+                        if (GameObject* pTrap = m_creature->GetMap()->GetGameObject(m_trapGuid))
                         {
                             if (pTrap->isSpawned())
                                 m_creature->GetMotionMaster()->MovePoint(0, pTrap->GetPositionX(), pTrap->GetPositionY(), pTrap->GetPositionZ());
                         }
                         break;
                     case 2:
-                        if (GameObject* pTrap = m_creature->GetMap()->GetGameObject(m_uiGobjectTrapGUID))
+                        if (GameObject* pTrap = m_creature->GetMap()->GetGameObject(m_trapGuid))
                         {
                             if (pTrap->isSpawned())
                             {
                                 pTrap->Use(m_creature);
 
-                                if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_uiPlayerGUID))
+                                if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_playerGuid))
                                 {
                                     if (pPlayer->isAlive())
                                         pPlayer->KilledMonsterCredit(m_creature->GetEntry());
@@ -291,6 +292,128 @@ CreatureAI* GetAI_npc_nesingwary_trapper(Creature* pCreature)
     return new npc_nesingwary_trapperAI(pCreature);
 }
 
+/*#####
+# npc_oil_stained_wolf
+#####*/
+
+enum
+{
+    SPELL_THROW_WOLF_BAIT           = 53326,
+    SPELL_PLACE_WOLF_BAIT           = 46072,                // doesn't appear to be used for anything
+    SPELL_HAS_EATEN                 = 46073,
+    SPELL_SUMMON_DROPPINGS          = 46075,
+
+    FACTION_MONSTER                 = 634,
+
+    POINT_DEST                      = 1
+};
+
+struct MANGOS_DLL_DECL npc_oil_stained_wolfAI : public ScriptedAI
+{
+    npc_oil_stained_wolfAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    bool m_bCanCrapInPublic;
+    uint32 m_uiPooTimer;
+
+    void Reset()
+    {
+        m_bCanCrapInPublic = false;
+        m_uiPooTimer = 0;
+    }
+
+    void MovementInform(uint32 uiType, uint32 uiPointId)
+    {
+        if (uiType != POINT_MOTION_TYPE)
+            return;
+
+        if (uiPointId == POINT_DEST)
+        {
+            DoCastSpellIfCan(m_creature, SPELL_HAS_EATEN);
+            m_uiPooTimer = 4000;
+        }
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        {
+            if (m_uiPooTimer)
+            {
+                if (m_uiPooTimer <= uiDiff)
+                {
+                    if (m_bCanCrapInPublic)
+                    {
+                        DoCastSpellIfCan(m_creature, SPELL_SUMMON_DROPPINGS);
+                        m_creature->GetMotionMaster()->Clear();
+                        Reset();
+                    }
+                    else
+                    {
+                        m_creature->HandleEmote(EMOTE_ONESHOT_BATTLEROAR);
+                        m_bCanCrapInPublic = true;
+                        m_uiPooTimer = 3000;
+                    }
+                }
+                else
+                    m_uiPooTimer -= uiDiff;
+            }
+
+            return;
+        }
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_oil_stained_wolf(Creature* pCreature)
+{
+    return new npc_oil_stained_wolfAI(pCreature);
+}
+
+bool EffectDummyCreature_npc_oil_stained_wolf(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget)
+{
+    if (uiSpellId == SPELL_THROW_WOLF_BAIT)
+    {
+        if (uiEffIndex == EFFECT_INDEX_0 && pCreatureTarget->getFaction() != FACTION_MONSTER && !pCreatureTarget->HasAura(SPELL_HAS_EATEN))
+        {
+            pCreatureTarget->SetFactionTemporary(FACTION_MONSTER);
+            pCreatureTarget->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
+
+            pCreatureTarget->GetMotionMaster()->MoveIdle();
+
+            float fX, fY, fZ;
+            pCaster->GetContactPoint(pCreatureTarget, fX, fY, fZ, CONTACT_DISTANCE);
+            pCreatureTarget->GetMotionMaster()->MovePoint(POINT_DEST, fX, fY, fZ);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool EffectAuraDummy_npc_oil_stained_wolf(const Aura* pAura, bool bApply)
+{
+    if (pAura->GetId() == SPELL_HAS_EATEN)
+    {
+        if (pAura->GetEffIndex() != EFFECT_INDEX_0)
+            return false;
+
+        if (bApply)
+        {
+            pAura->GetTarget()->HandleEmote(EMOTE_ONESHOT_CUSTOMSPELL01);
+        }
+        else
+        {
+            Creature* pCreature = (Creature*)pAura->GetTarget();
+            pCreature->setFaction(pCreature->GetCreatureInfo()->faction_A);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 /*######
 ## go_caribou_trap
 ######*/
@@ -303,7 +426,7 @@ bool GOUse_go_caribou_trap(Player* pPlayer, GameObject* pGo)
     if (Creature* pCreature = pGo->SummonCreature(NPC_NESINGWARY_TRAPPER, fX, fY, fZ, pGo->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000))
     {
         if (npc_nesingwary_trapperAI* pTrapperAI = dynamic_cast<npc_nesingwary_trapperAI*>(pCreature->AI()))
-            pTrapperAI->StartAction(pPlayer->GetGUID(), pGo->GetGUID());
+            pTrapperAI->StartAction(pPlayer, pGo);
 
         pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
 
@@ -318,6 +441,100 @@ bool GOUse_go_caribou_trap(Player* pPlayer, GameObject* pGo)
     }
 
     return true;
+}
+/*#####
+# npc_sinkhole_kill_credit
+#####*/
+
+enum
+{
+    SPELL_SUMMON_EXPLOSIVES_CART_FIRE   = 46799,
+    SPELL_SUMMON_SCOURGE_BURROWER       = 46800,
+    SPELL_COSMETIC_HUGE_EXPLOSION       = 46225,
+    SPELL_CANNON_FIRE                   = 42445,
+};
+
+struct MANGOS_DLL_DECL npc_sinkhole_kill_creditAI : public ScriptedAI
+{
+    npc_sinkhole_kill_creditAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    ObjectGuid m_uiCartGUID;
+    ObjectGuid m_uiWormGUID;
+    uint32 m_uiCartTimer;
+    uint32 m_uiCartPhase;
+
+    void Reset()
+    {
+        m_uiCartGUID.Clear();
+        m_uiWormGUID.Clear();
+        m_uiCartTimer = 2000;
+        m_uiCartPhase = 0;
+    }
+
+    void JustSummoned(Creature* pSummoned)
+    {
+        m_uiWormGUID = pSummoned->GetObjectGuid();
+    }
+
+    void JustSummoned(GameObject* pGo)
+    {
+        // Go is not really needed, but ok to use as a check point so only one "event" can be processed at a time
+        if (!m_uiCartGUID.IsEmpty())
+            return;
+
+        // Expecting summoned from mangos dummy effect 46797
+        m_uiCartGUID = pGo->GetObjectGuid();
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (!m_uiCartGUID.IsEmpty())
+        {
+            if (m_uiCartTimer <= uiDiff)
+            {
+                switch(m_uiCartPhase)
+                {
+                    case 0:
+                        DoCastSpellIfCan(m_creature, SPELL_SUMMON_EXPLOSIVES_CART_FIRE);
+                        m_uiCartTimer = 4000;
+                        break;
+                    case 1:
+                        // Unclear if these should be in a dummy effect or not.
+                        // The order of spells are correct though.
+                        DoCastSpellIfCan(m_creature, SPELL_COSMETIC_HUGE_EXPLOSION, CAST_TRIGGERED);
+                        DoCastSpellIfCan(m_creature, SPELL_CANNON_FIRE, CAST_TRIGGERED);
+                        break;
+                    case 2:
+                        DoCastSpellIfCan(m_creature, SPELL_SUMMON_SCOURGE_BURROWER);
+                        m_uiCartTimer = 2000;
+                        break;
+                    case 3:
+                        if (Creature* pWorm = m_creature->GetMap()->GetCreature(m_uiWormGUID))
+                        {
+                            pWorm->SetDeathState(JUST_DIED);
+                            pWorm->SetHealth(0);
+                        }
+                        m_uiCartTimer = 10000;
+                        break;
+                    case 4:
+                        if (Creature* pWorm = m_creature->GetMap()->GetCreature(m_uiWormGUID))
+                            pWorm->RemoveCorpse();
+
+                        Reset();
+                        return;
+                }
+
+                ++m_uiCartPhase;
+            }
+            else
+                m_uiCartTimer -= uiDiff;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_sinkhole_kill_credit(Creature* pCreature)
+{
+    return new npc_sinkhole_kill_creditAI(pCreature);
 }
 
 /*######
@@ -335,7 +552,7 @@ enum
 bool GossipHello_npc_surristrasz(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->isQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+        pPlayer->PrepareQuestMenu(pCreature->GetObjectGuid());
 
     if (pCreature->isTaxi())
     {
@@ -343,7 +560,7 @@ bool GossipHello_npc_surristrasz(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, GOSSIP_ITEM_FLIGHT, GOSSIP_SENDER_MAIN, GOSSIP_OPTION_TAXIVENDOR);
     }
 
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
     return true;
 }
 
@@ -377,7 +594,7 @@ enum
 bool GossipHello_npc_tiare(Player* pPlayer, Creature* pCreature)
 {
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_TELEPORT, GOSSIP_SENDER_MAIN, GOSSIP_OPTION_GOSSIP);
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
     return true;
 }
 
@@ -521,7 +738,7 @@ bool QuestAccept_npc_lurgglbr(Player* pPlayer, Creature* pCreature, const Quest*
         if (npc_lurgglbrAI* pEscortAI = dynamic_cast<npc_lurgglbrAI*>(pCreature->AI()))
         {
             pCreature->setFaction(FACTION_ESCORT_N_NEUTRAL_PASSIVE);
-            pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
+            pEscortAI->Start(false, pPlayer, pQuest);
         }
     }
     return true;
@@ -693,7 +910,7 @@ struct MANGOS_DLL_DECL npc_beryl_sorcererAI : public FollowerAI
     {
             AttackStart(pWho);
     }
-    
+
     void SpellHit(Unit* pCaster, SpellEntry const* pSpell)
     {
         if (pSpell->Id == SPELL_ARCANE_CHAINS && pCaster->GetTypeId() == TYPEID_PLAYER && !bEnslaved)
@@ -706,7 +923,7 @@ struct MANGOS_DLL_DECL npc_beryl_sorcererAI : public FollowerAI
                 StartFollow(pChainer, 35, NULL);
                 m_creature->UpdateEntry(NPC_CAPTURED_BERLY_SORCERER);
                 DoCast(m_creature, SPELL_COSMETIC_ENSLAVE_CHAINS_SELF, true);
-               
+ 
                 bEnslaved = true;
                 }
             }
@@ -743,66 +960,63 @@ CreatureAI* GetAI_npc_beryl_sorcerer(Creature* pCreature)
 
 void AddSC_borean_tundra()
 {
-    Script *newscript;
+    Script* pNewScript;
 
-    newscript = new Script;
-    newscript->Name = "npc_fizzcrank_fullthrottle";
-    newscript->pGossipHello = &GossipHello_npc_fizzcrank_fullthrottle;
-    newscript->pGossipSelect = &GossipSelect_npc_fizzcrank_fullthrottle;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_fizzcrank_fullthrottle";
+    pNewScript->pGossipHello = &GossipHello_npc_fizzcrank_fullthrottle;
+    pNewScript->pGossipSelect = &GossipSelect_npc_fizzcrank_fullthrottle;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "npc_iruk";
-    newscript->pGossipHello = &GossipHello_npc_iruk;
-    newscript->pGossipSelect = &GossipSelect_npc_iruk;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_iruk";
+    pNewScript->pGossipHello = &GossipHello_npc_iruk;
+    pNewScript->pGossipSelect = &GossipSelect_npc_iruk;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "npc_kara_thricestar";
-    newscript->pGossipHello = &GossipHello_npc_kara_thricestar;
-    newscript->pGossipSelect = &GossipSelect_npc_kara_thricestar;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_kara_thricestar";
+    pNewScript->pGossipHello = &GossipHello_npc_kara_thricestar;
+    pNewScript->pGossipSelect = &GossipSelect_npc_kara_thricestar;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "npc_nesingwary_trapper";
-    newscript->GetAI = &GetAI_npc_nesingwary_trapper;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_nesingwary_trapper";
+    pNewScript->GetAI = &GetAI_npc_nesingwary_trapper;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "go_caribou_trap";
-    newscript->pGOUse = &GOUse_go_caribou_trap;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_oil_stained_wolf";
+    pNewScript->GetAI = &GetAI_npc_oil_stained_wolf;
+    pNewScript->pEffectDummyNPC = &EffectDummyCreature_npc_oil_stained_wolf;
+    pNewScript->pEffectAuraDummy = &EffectAuraDummy_npc_oil_stained_wolf;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "npc_surristrasz";
-    newscript->pGossipHello = &GossipHello_npc_surristrasz;
-    newscript->pGossipSelect = &GossipSelect_npc_surristrasz;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "go_caribou_trap";
+    pNewScript->pGOUse = &GOUse_go_caribou_trap;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "npc_tiare";
-    newscript->pGossipHello = &GossipHello_npc_tiare;
-    newscript->pGossipSelect = &GossipSelect_npc_tiare;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_sinkhole_kill_credit";
+    pNewScript->GetAI = &GetAI_npc_sinkhole_kill_credit;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "npc_lurgglbr";
-    newscript->GetAI = &GetAI_npc_lurgglbr;
-    newscript->pQuestAcceptNPC = &QuestAccept_npc_lurgglbr;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_surristrasz";
+    pNewScript->pGossipHello = &GossipHello_npc_surristrasz;
+    pNewScript->pGossipSelect = &GossipSelect_npc_surristrasz;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "npc_nexus_drake";
-    newscript->GetAI = &GetAI_npc_nexus_drake;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_tiare";
+    pNewScript->pGossipHello = &GossipHello_npc_tiare;
+    pNewScript->pGossipSelect = &GossipSelect_npc_tiare;
+    pNewScript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "go_scourge_cage";
-    newscript->pGOUse = &GOHello_go_scourge_cage;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_beryl_sorcerer";
-    newscript->GetAI = &GetAI_npc_beryl_sorcerer;
-    newscript->RegisterSelf();
+    pNewScript = new Script;
+    pNewScript->Name = "npc_lurgglbr";
+    pNewScript->GetAI = &GetAI_npc_lurgglbr;
+    pNewScript->pQuestAcceptNPC = &QuestAccept_npc_lurgglbr;
+    pNewScript->RegisterSelf();
 }
