@@ -83,7 +83,7 @@ enum
     NPC_SPECT_RIDER             = 16150,
     NPC_SPECT_HORSE             = 16149,
 
-    // End boss adds
+    // Kel'Thuzad
     NPC_SOLDIER_FROZEN          = 16427,
     NPC_UNSTOPPABLE_ABOM        = 16428,
     NPC_SOUL_WEAVER             = 16429,
@@ -200,7 +200,6 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
 
         void SetData(uint32 uiType, uint32 uiData);
         uint32 GetData(uint32 uiType);
-        uint64 GetData64(uint32 uiData);
 
         void SetSpecialAchievementCriteria(uint32 uiType, bool bIsMet);
         bool CheckAchievementCriteriaMeet(uint32 uiCriteriaId, Player const* pSource, Unit const* pTarget, uint32 uiMiscValue1 /* = 0*/);
@@ -263,14 +262,14 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         uint64 m_uiFaerWebGUID;
         uint64 m_uiMaexOuterGUID;
         uint64 m_uiMaexInnerGUID;
-        std::list<uint64> m_lFaerlinaAddGUIDs;
+        GUIDList m_lFaerlinaAddGUIDs;
 
         uint64 m_uiGothikGUID;
         uint64 m_uiGothCombatGateGUID;
         uint64 m_uiGothikEntryDoorGUID;
         uint64 m_uiGothikExitDoorGUID;
-        std::list<uint64> m_lGothTriggerList;
-        UNORDERED_MAP<uint64, GothTrigger> m_mGothTriggerMap;
+        GUIDList m_lGothTriggerList;
+        UNORDERED_MAP<ObjectGuid, GothTrigger> m_mGothTriggerMap;
 
         uint64 m_uiHorsemenDoorGUID;
         uint64 m_uiHorsemenChestGUID;
@@ -280,7 +279,7 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         uint64 m_uiHeigEntryDoorGUID;
         uint64 m_uiHeigExitDoorGUID;
         uint64 m_uiLoathebDoorGUID;
-        std::vector<uint64> m_avuiHeiganTraps[MAX_HEIGAN_TRAP_AREAS];
+        GUIDVector m_avuiHeiganTraps[MAX_HEIGAN_TRAP_AREAS];
 
         uint64 m_uiSapphironBirthGUID;
         uint64 m_uiKelthuzadWindow1GUID;
@@ -290,7 +289,6 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
 
         uint64 m_uiKelthuzadDoorGUID;
         uint64 m_uiKelthuzadExitDoorGUID;
-
 
         float m_fChamberCenterX;
         float m_fChamberCenterY;
