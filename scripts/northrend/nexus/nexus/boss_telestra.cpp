@@ -185,7 +185,7 @@ struct MANGOS_DLL_DECL boss_telestraAI : public ScriptedAI
             return pSummoned->GetObjectGuid();
         }
 
-        return 0;
+        return ObjectGuid();
     }
 
     void UpdateAI(const uint32 uiDiff)

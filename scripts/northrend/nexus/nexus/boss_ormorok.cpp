@@ -52,7 +52,7 @@ enum
     SAY_KILL                                   = -1576024,
 
     // Others
-    SPIKE_DISTANCE                             = 5.0f
+    SPIKE_DISTANCE                             = 5
 };
 
 struct MANGOS_DLL_DECL boss_ormorokAI : public ScriptedAI
