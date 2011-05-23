@@ -11,6 +11,7 @@ extern void AddSC_battlegroundSA();
 //custom
 extern void AddSC_npc_arena_honor();
 extern void AddSC_mob_teleguy();
+extern void AddSC_vip_master();
 
 // OutdoorPvP
 extern void AddSC_outdoor_pvp_eastern_kingdoms();
@@ -547,7 +548,8 @@ void AddScripts()
     //custom
     AddSC_npc_arena_honor();
     AddSC_mob_teleguy();
-
+    AddSC_vip_master();
+    
     // OutdoorPvP zone scripts
     // Must be _before_ map scripts call!
     AddSC_outdoor_pvp_eastern_plaguelands();
