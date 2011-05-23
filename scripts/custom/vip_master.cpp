@@ -19,11 +19,6 @@ by Nezz
 */
 
 #include "precompiled.h"
-#include "scpCreature.h"
-#include "sc_gossip.h"
-#include "../../../../game/pPlayer.h"
-#include "../../../../game/GossipDef.h"
-#include "../../../../shared/Log.h"
 
 #define HOW_TO_BECOME_VIP    "Wie kann ich VIP werden?"
 #define QUESTLIST            "Ich möchte meine VIP Quest beginnen."
@@ -61,7 +56,7 @@ CreatureAI* GetAI_vip_master(Creature *pCreature)
     return new vip_masterAI (pCreature);
 }
 
-bool GossipHello_vip_master(pPlayer *pPlayer, Creature *pCreature)
+bool GossipHello_vip_master(Player *pPlayer, Creature *pCreature)
 {
     ObjectGuid pguid = pPlayer->GetGUID();
     ObjectGuid cguid = pCreature->GetGUID();
@@ -85,7 +80,7 @@ bool GossipHello_vip_master(pPlayer *pPlayer, Creature *pCreature)
     return true;
 }
 
-bool GossipSelect_vip_master(pPlayer *pPlayer, Creature *pCreature, uint32 sender, uint32 action)
+bool GossipSelect_vip_master(Player *pPlayer, Creature *pCreature, uint32 sender, uint32 action)
 {
     ObjectGuid pguid = pPlayer->GetGUID();
     ObjectGuid cguid = pCreature->GetGUID();
@@ -123,12 +118,12 @@ bool GossipSelect_vip_master(pPlayer *pPlayer, Creature *pCreature, uint32 sende
     return true;
 }
 
-uint32 NPCDialogStatus_vip_master(pPlayer *pPlayer, Creature *pCreature )
+uint32 NPCDialogStatus_vip_master(Player *pPlayer, Creature *pCreature )
 {
     return pPlayer->QUEST_DIALOG_STATUS(pPlayer, pCreature, DIALOG_STATUS_LOW_LEVEL_AVAILABLE);
 }
 
-bool QuestAccept_vip_master(pPlayer *pPlayer, Creature *pCreaturereature, Quest const *quest)
+bool QuestAccept_vip_master(Player *pPlayer, Creature *pCreature, Quest const *quest)
 {
     if(quest->GetQuestId() == 99000)
     {
