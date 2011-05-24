@@ -1,7 +1,30 @@
+/* Copyright (C) 2006 - 2011 ScriptDev2 <http://www.scriptdev2.com/>
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/* ScriptData
+SDName: BattlegroundSA
+SD%Complete: 100
+SDAuthor: Ankso
+SDCategory: BattlegroundSA
+EndScriptData */
+
 #include "precompiled.h"
 #include "BattleGroundSA.h"
 #include "Vehicle.h"
- 
+
 #define Spell_Boom        52408
 
 struct MANGOS_DLL_DECL npc_sa_bombAI : public ScriptedAI
@@ -9,7 +32,11 @@ struct MANGOS_DLL_DECL npc_sa_bombAI : public ScriptedAI
     npc_sa_bombAI(Creature* pCreature) : ScriptedAI(pCreature) { SetCombatMovement(false); Reset(); }
     uint32 event_bomb;
     float fx, fy, fz;
-    void Reset() { m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE); event_bomb = 10000; }
+    void Reset()
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        event_bomb = 10000;
+    }
     void Aggro(Unit* who){}
     void JustDied(Unit* Killer){ m_creature->ForcedDespawn(); }
     void KilledUnit(Unit *victim){}
@@ -21,14 +48,61 @@ struct MANGOS_DLL_DECL npc_sa_bombAI : public ScriptedAI
             m_creature->CastSpell(m_creature, 34602, true);
             m_creature->CastSpell(m_creature, 71495, true);
             m_creature->CastSpell(fx, fy, fz, Spell_Boom, true, 0, 0, m_creature->GetCharmerGuid());
+			// hackfix to damage the gate
+			MaNGOS::GameObjectInRangeCheck check(m_creature, fx, fy, fz, 10.0f);
+            std::list<GameObject*> goList;
+            MaNGOS::GameObjectListSearcher<MaNGOS::GameObjectInRangeCheck> searcher(goList, check);
+            Cell::VisitAllObjects(m_creature, searcher, 10.0f);
+			if (!goList.empty())
+            {
+				for (std::list<GameObject*>::const_iterator itr = goList.begin(); itr != goList.end(); ++itr)
+				{
+					(*itr)->DamageTaken((Unit*)m_creature, 1250);
+				}
+			}
             m_creature->ForcedDespawn();
         } else event_bomb -= diff;
     }
 };
- 
+
+bool GossipHello_npc_sa_bomb(Player* pPlayer, Creature* pCreature)
+{
+     if (!pPlayer || !pCreature)
+		return false;
+
+     pPlayer->CLOSE_GOSSIP_MENU();
+     if (BattleGround *bg = pPlayer->GetBattleGround())
+     {
+		if (((BattleGroundSA*)bg)->GetDefender() == pPlayer->GetTeam())
+		{
+			pCreature->ForcedDespawn(3000);
+		}
+	 }
+     return true;
+}
+
 CreatureAI* GetAI_npc_sa_bomb(Creature* pCreature)
 {
     return new npc_sa_bombAI (pCreature);
+}
+
+bool GOHello_go_sa_bomb(Player* pPlayer, GameObject* pGo)
+{
+	if (!pPlayer || !pGo)
+		return false;
+
+    if (pPlayer->GetMapId() == 607)
+    {
+        if (BattleGround *bg = pPlayer->GetBattleGround())
+        {
+            if (pPlayer->GetTeam() != bg->GetDefender())
+            {
+				pPlayer->CastSpell(pPlayer, 52415, false);
+				pGo->Delete();
+            }
+        }
+    }
+    return true;
 }
 
 struct MANGOS_DLL_DECL npc_sa_demolisherAI : public ScriptedAI
@@ -71,7 +145,7 @@ struct MANGOS_DLL_DECL npc_sa_demolisherAI : public ScriptedAI
         }
         return false;
     }
- 
+
     void UpdateAI(const uint32 diff)
     {
         if (!m_creature->isCharmed())
@@ -107,19 +181,19 @@ struct MANGOS_DLL_DECL npc_sa_demolisherAI : public ScriptedAI
         }
     }
 };
- 
+
 CreatureAI* GetAI_npc_sa_demolisher(Creature* pCreature)
 {
     return new npc_sa_demolisherAI(pCreature);
 }
- 
+
 bool GossipHello_npc_sa_demolisher(Player* pPlayer, Creature* pCreature)
 {
      pPlayer->CLOSE_GOSSIP_MENU();
      ((npc_sa_demolisherAI*)pCreature->AI())->StartEvent(pPlayer);
          return true;
 }
- 
+
 struct MANGOS_DLL_DECL npc_sa_cannonAI : public ScriptedAI
 {
     npc_sa_cannonAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -149,7 +223,7 @@ struct MANGOS_DLL_DECL npc_sa_cannonAI : public ScriptedAI
                 pPlayer->EnterVehicle(vehicle);
         }
     }
- 
+
     void UpdateAI(const uint32 diff)
     {
         if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
@@ -184,19 +258,19 @@ struct MANGOS_DLL_DECL npc_sa_cannonAI : public ScriptedAI
         }
     }
 };
- 
+
 CreatureAI* GetAI_npc_sa_cannon(Creature* pCreature)
 {
     return new npc_sa_cannonAI(pCreature);
 }
- 
+
 bool GossipHello_npc_sa_cannon(Player* pPlayer, Creature* pCreature)
 {
      pPlayer->CLOSE_GOSSIP_MENU();
      ((npc_sa_cannonAI*)pCreature->AI())->StartEvent(pPlayer);
          return true;
 }
- 
+
 #define GOSSIP_START_EVENT_1        "Start building the Demolisher."
 #define GOSSIP_START_EVENT_2        "You have nothing to do now!"
 #define GOSSIP_EVENT_STARTED        "Im working on it."
@@ -248,7 +322,7 @@ struct MANGOS_DLL_DECL npc_sa_vendorAI : public ScriptedAI
                 m_creature->MonsterSay(SA_MESSAGE_8,LANG_UNIVERSAL,0);
                 build=false;
             }else build_time -= diff;
- 
+
             switch(build_time/2)
             {
                 case 15000: m_creature->MonsterSay(SA_MESSAGE_2,LANG_UNIVERSAL,0); break;
@@ -257,17 +331,17 @@ struct MANGOS_DLL_DECL npc_sa_vendorAI : public ScriptedAI
         }
     }
 };
- 
+
 CreatureAI* GetAI_npc_sa_vendor(Creature* pCreature)
 {
     return new npc_sa_vendorAI(pCreature);
 }
- 
+
 bool GossipHello_npc_sa_vendor(Player* pPlayer, Creature* pCreature)
 {
     uint8 gyd = NULL;
     if (pCreature->GetEntry() == 29260)
-        gyd = 0;    
+        gyd = 0;
     if (pCreature->GetEntry() == 29262)
         gyd = 1;
     if (!build)
@@ -282,7 +356,7 @@ bool GossipHello_npc_sa_vendor(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START_EVENT_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    
+
     return true;
 }
 
@@ -317,7 +391,7 @@ static float SpawnLocation[7][3]=
     {880.162f, -95.979f, 109.835f},
     {880.68f, -120.799f, 109.835f},
 };
- 
+
 static float TeleLocation[7][3]=
 {
     {1451.72f, -224.863f, 41.9564f},
@@ -328,7 +402,7 @@ static float TeleLocation[7][3]=
     {808.447f, -109.192f, 109.835f},
     {808.447f, -109.192f, 109.835f},
 };
- 
+
 bool GOHello_go_sa_def_portal(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetMapId() == 607)
@@ -339,7 +413,7 @@ bool GOHello_go_sa_def_portal(Player* pPlayer, GameObject* pGo)
             {
                 for (uint32 i=0; i<7; ++i)
                 {
-                    if ((pGo->GetPositionX() == SpawnLocation[i][0]) && 
+                    if ((pGo->GetPositionX() == SpawnLocation[i][0]) &&
                     (pGo->GetPositionY() == SpawnLocation[i][1]) &&
                     (pGo->GetPositionZ() == SpawnLocation[i][2]))
                     {
@@ -347,12 +421,12 @@ bool GOHello_go_sa_def_portal(Player* pPlayer, GameObject* pGo)
                         return true;
                     }
                 }
-            } else pPlayer->MonsterSay("No puedes usarlo",LANG_UNIVERSAL, pPlayer);
+            }
         }
     }
     return false;
 }
- 
+
 void AddSC_battlegroundSA()
 {
     Script *pNewScript;
@@ -360,7 +434,13 @@ void AddSC_battlegroundSA()
     pNewScript = new Script;
     pNewScript->Name="npc_sa_bomb";
     pNewScript->GetAI = &GetAI_npc_sa_bomb;
-    pNewScript->RegisterSelf();
+    pNewScript->pGossipHello = &GossipHello_npc_sa_bomb;
+	pNewScript->RegisterSelf();
+
+	pNewScript = new Script;
+    pNewScript->Name="go_sa_bomb";
+    pNewScript->pGOUse = &GOHello_go_sa_bomb;
+	pNewScript->RegisterSelf();
 
     pNewScript = new Script;
     pNewScript->Name = "npc_sa_demolisher";
