@@ -166,7 +166,7 @@ struct MANGOS_DLL_DECL npc_riggle_bassbaitAI : public ScriptedAI
     }
 };
 /**
- * GossipHello for NPC Riggle Bassbait. 
+ * GossipHello for NPC Riggle Bassbait.
  * This is called each time a Player tries to talk with the NPC.
  */
 bool GossipHello_npc_riggle_bassbait(Player* pPlayer, Creature* pCreature)
@@ -177,7 +177,7 @@ bool GossipHello_npc_riggle_bassbait(Player* pPlayer, Creature* pCreature)
         pPlayer->SEND_GOSSIP_MENU(7614, pCreature->GetGUID());
         return true;
     }
-    // The Quest is not there anymore 
+    // The Quest is not there anymore
     // There is a winner!
     pPlayer->SEND_GOSSIP_MENU(7714, pCreature->GetGUID());
     return true;
