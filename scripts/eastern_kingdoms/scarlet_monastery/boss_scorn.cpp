@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2011 ScriptDev2 <http://www.scriptdev2.com/>
+/* Copyright (C) 2006 - 2011 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -23,10 +23,13 @@ EndScriptData */
 
 #include "precompiled.h"
 
-#define SPELL_LICHSLAP                  28873
-#define SPELL_FROSTBOLTVOLLEY           8398
-#define SPELL_MINDFLAY                  17313
-#define SPELL_FROSTNOVA                 15531
+enum
+{
+    SPELL_LICHSLAP                 = 28873,
+    SPELL_FROSTBOLTVOLLEY          = 8398,
+    SPELL_MINDFLAY                 = 17313,
+    SPELL_FROSTNOVA                = 15531
+};
 
 struct MANGOS_DLL_DECL boss_scornAI : public ScriptedAI
 {
