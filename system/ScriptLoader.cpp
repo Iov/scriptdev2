@@ -9,6 +9,9 @@ extern void AddSC_battleground();
 extern void AddSC_battlegroundSA();
 
 //custom
+extern void AddSC_custom_gameobjects();
+extern void AddSC_custom_items();
+extern void AddSC_custom_npcs();
 extern void AddSC_npc_arena_honor();
 extern void AddSC_mob_teleguy();
 extern void AddSC_vip_master();
@@ -548,6 +551,9 @@ void AddScripts()
 	AddSC_battlegroundSA();
 
     //custom
+    AddSC_custom_gameobjects();
+    AddSC_custom_items();
+    AddSC_custom_npcs();
     AddSC_npc_arena_honor();
     AddSC_mob_teleguy();
     AddSC_vip_master();
