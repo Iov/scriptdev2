@@ -49,13 +49,6 @@ UPDATE creature_template SET ScriptName = 'mob_dark_rune_acolyte' WHERE entry = 
 UPDATE `creature_template` SET `ScriptName`='mob_rimefang', `AIName` ='' WHERE `entry`=36661;
 UPDATE `creature_template` SET `ScriptName`='npc_jaina_or_sylvanas_POSintro', `AIName` ='' WHERE `entry` IN (36990,36993);
 UPDATE `creature_template` SET `ScriptName`='npc_jaina_or_sylvanas_POSoutro', `AIName` ='' WHERE `entry` IN (38189,38188);
---UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_soulguard_watchman' where `entry` IN (36478);
---UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_soulguard_reaper' where `entry` IN (36499);
---UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_soulguard_adept' where `entry` IN (36620);
---UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_soulguard_bonecaster' where `entry` IN (36564);
---UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_soulguard_animator' where `entry` IN (36516);
---UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_soul_horror' where `entry` IN (36522);
---UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_spectral_warden' where `entry` IN (36666);
 UPDATE creature_template SET ScriptName = 'mob_dark_rune_acolyte' WHERE entry = 33110;
 UPDATE creature_template SET ScriptName='mob_dark_rune_evoker' WHERE entry=32878;
 UPDATE `creature_template` SET `ScriptName` = 'boss_omor_the_unscarred' WHERE `entry` = 17308;

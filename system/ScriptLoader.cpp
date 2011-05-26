@@ -8,6 +8,12 @@
 extern void AddSC_battleground();
 extern void AddSC_battlegroundSA();
 
+//alterac_valley
+extern void AddSC_boss_balinda();
+extern void AddSC_boss_drekthar();
+extern void AddSC_boss_galvangar();
+extern void AddSC_boss_vanndar();
+
 //Specialized Guards and world leader guards
 extern void AddSC_ancient_of_war();
 extern void AddSC_high_fire_mage();
@@ -562,6 +568,12 @@ void AddScripts()
     //battlegrounds
     AddSC_battleground();
 	AddSC_battlegroundSA();
+
+    //alterac_valley
+    AddSC_boss_balinda();
+    AddSC_boss_drekthar();
+    AddSC_boss_galvangar();
+    AddSC_boss_vanndar();
 
     //custom
     AddSC_custom_gameobjects();
