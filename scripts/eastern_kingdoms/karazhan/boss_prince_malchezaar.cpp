@@ -23,18 +23,45 @@ EndScriptData */
 
 #include "precompiled.h"
 
-#define SAY_AGGRO           -1532091
-#define SAY_AXE_TOSS1       -1532092
-#define SAY_AXE_TOSS2       -1532093
-#define SAY_SPECIAL1        -1532094
-#define SAY_SPECIAL2        -1532095
-#define SAY_SPECIAL3        -1532096
-#define SAY_SLAY1           -1532097
-#define SAY_SLAY2           -1532098
-#define SAY_SLAY3           -1532099
-#define SAY_SUMMON1         -1532100
-#define SAY_SUMMON2         -1532101
-#define SAY_DEATH           -1532102
+enum
+{
+    SAY_AGGRO          = -1532091,
+    SAY_AXE_TOSS1      = -1532092,
+    SAY_AXE_TOSS2      = -1532093,
+    SAY_SPECIAL1       = -1532094,
+    SAY_SPECIAL2       = -1532095,
+    SAY_SPECIAL3        = -1532096,
+    SAY_SLAY1          = -1532097,
+    SAY_SLAY2          = -1532098,
+    SAY_SLAY3          = -1532099,
+    SAY_SUMMON1        = -1532100,
+    SAY_SUMMON2        = -1532101,
+    SAY_DEATH          = -1532102,
+
+//Enfeeble is supposed to reduce hp to 1 and then heal player back to full when it ends
+//Along with reducing healing and regen while enfeebled to 0%
+//This spell effect will only reduce healing
+
+    SPELL_ENFEEBLE         = 30843,                       //Enfeeble during phase 1 and 2
+    SPELL_ENFEEBLE_EFFECT  = 41624,
+
+    SPELL_SHADOWNOVA       = 30852,                       //Shadownova used during all phases
+    SPELL_SW_PAIN          = 30854,                       //Shadow word pain during phase 1 and 3 (different targeting rules though)
+    SPELL_THRASH_PASSIVE   = 12787,                       //Extra attack chance during phase 2
+    SPELL_SUNDER_ARMOR     = 30901,                       //Sunder armor during phase 2
+    SPELL_THRASH_AURA      = 12787,                       //Passive proc chance for thrash
+    SPELL_EQUIP_AXES       = 30857,                       //Visual for axe equiping
+    SPELL_AMPLIFY_DAMAGE   = 39095,                      //Amplifiy during phase 3
+    SPELL_CLEAVE           = 30131,                      //Same as Nightbane.
+    SPELL_HELLFIRE         = 30859,                       //Infenals' hellfire aura
+    NETHERSPITE_INFERNAL   = 17646,                       //The netherspite infernal creature
+    MALCHEZARS_AXE         = 17650,                       //Malchezar's axes (creatures), summoned during phase 3
+
+    INFERNAL_MODEL_INVISIBLE   = 11686,                   //Infernal Effects
+    SPELL_INFERNAL_RELAY       = 30834,
+
+    EQUIP_ID_AXE               = 33542                  //Axes info
+};
 
 // 18 Coordinates for Infernal spawns
 struct InfernalPoint
@@ -67,30 +94,6 @@ static InfernalPoint InfernalPoints[] =
 };
 
 #define TOTAL_INFERNAL_POINTS 18
-
-//Enfeeble is supposed to reduce hp to 1 and then heal player back to full when it ends
-//Along with reducing healing and regen while enfeebled to 0%
-//This spell effect will only reduce healing
-
-#define SPELL_ENFEEBLE          30843                       //Enfeeble during phase 1 and 2
-#define SPELL_ENFEEBLE_EFFECT   41624
-
-#define SPELL_SHADOWNOVA        30852                       //Shadownova used during all phases
-#define SPELL_SW_PAIN           30854                       //Shadow word pain during phase 1 and 3 (different targeting rules though)
-#define SPELL_THRASH_PASSIVE    12787                       //Extra attack chance during phase 2
-#define SPELL_SUNDER_ARMOR      30901                       //Sunder armor during phase 2
-#define SPELL_THRASH_AURA       12787                       //Passive proc chance for thrash
-#define SPELL_EQUIP_AXES        30857                       //Visual for axe equiping
-#define SPELL_AMPLIFY_DAMAGE    39095                      //Amplifiy during phase 3
-#define SPELL_CLEAVE            30131                      //Same as Nightbane.
-#define SPELL_HELLFIRE          30859                       //Infenals' hellfire aura
-#define NETHERSPITE_INFERNAL    17646                       //The netherspite infernal creature
-#define MALCHEZARS_AXE          17650                       //Malchezar's axes (creatures), summoned during phase 3
-
-#define INFERNAL_MODEL_INVISIBLE    11686                   //Infernal Effects
-#define SPELL_INFERNAL_RELAY        30834
-
-#define EQUIP_ID_AXE                33542                   //Axes info
 
 //---------Infernal code first
 struct MANGOS_DLL_DECL netherspite_infernalAI : public ScriptedAI

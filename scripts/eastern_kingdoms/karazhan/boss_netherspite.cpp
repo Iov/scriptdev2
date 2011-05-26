@@ -26,18 +26,21 @@ EndScriptData */
 #include "GameObject.h"
 #include "../../../game/TemporarySummon.h"
 
-#define SPELL_NETHERBURN            30522
-#define SPELL_VOID_ZONE             37063
-#define SPELL_NETHERBREATH          38523
-#define SPELL_EMPOWERMENT           38549
-#define SPELL_NETHER_INFUSION       38688
-//#define SPELL_NETHERSPITE_ROAR    38684
+enum
+{
+    SPELL_NETHERBURN           = 30522,
+    SPELL_VOID_ZONE            = 37063,
+    SPELL_NETHERBREATH         = 38523,
+    SPELL_EMPOWERMENT          = 38549,
+    SPELL_NETHER_INFUSION      = 38688,
+    //SPELL_NETHERSPITE_ROAR   = 38684,
 
-#define SPELL_BANISH_VISUAL         39833
+    SPELL_BANISH_VISUAL        = 39833,
 
-//emotes
-#define EMOTE_PHASE_PORTAL          -1532089
-#define EMOTE_PHASE_BANISH          -1532090
+    //emotes
+    EMOTE_PHASE_PORTAL         = -1532089,
+    EMOTE_PHASE_BANISH         = -1532090
+};
 
 enum Portals
 {
