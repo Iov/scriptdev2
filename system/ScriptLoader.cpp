@@ -158,6 +158,9 @@ extern void AddSC_stratholme();
 extern void AddSC_instance_sunken_temple();                 //sunken_temple
 extern void AddSC_sunken_temple();
 extern void AddSC_boss_brutallus();                         //sunwell_plateau
+extern void AddSC_boss_felmyst();
+extern void AddSC_boss_muru_entropius();
+extern void AddSC_boss_kiljaeden();
 extern void AddSC_boss_kalecgos();
 extern void AddSC_instance_sunwell_plateau();
 extern void AddSC_boss_archaedas();                         //uldaman
