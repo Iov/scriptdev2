@@ -165,7 +165,7 @@ struct MANGOS_DLL_DECL npc_a_special_surpriseAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho)
     {
-        if (!m_playerGuid.IsEmpty() || pWho->GetTypeId() != TYPEID_PLAYER || !pWho->IsWithinDist(m_creature, INTERACTION_DISTANCE))
+        if (m_playerGuid || pWho->GetTypeId() != TYPEID_PLAYER || !pWho->IsWithinDist(m_creature, INTERACTION_DISTANCE))
             return;
 
         if (MeetQuestCondition((Player*)pWho))
@@ -174,7 +174,7 @@ struct MANGOS_DLL_DECL npc_a_special_surpriseAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff)
     {
-        if (!m_playerGuid.IsEmpty() && !m_creature->getVictim() && m_creature->isAlive())
+        if (m_playerGuid && !m_creature->getVictim() && m_creature->isAlive())
         {
             if (m_uiExecuteSpeech_Timer < uiDiff)
             {
@@ -1005,7 +1005,7 @@ struct MANGOS_DLL_DECL npc_unworthy_initiateAI : public ScriptedAI
 
     Creature* GetAnchor()
     {
-        if (!m_myAnchorGuid.IsEmpty())
+        if (m_myAnchorGuid)
             return m_creature->GetMap()->GetCreature(m_myAnchorGuid);
         else
             return GetClosestCreatureWithEntry(m_creature, NPC_ANCHOR, INTERACTION_DISTANCE*2);
@@ -3658,39 +3658,39 @@ struct MANGOS_DLL_DECL mob_scarlet_courierAI : ScriptedAI
         Reset();
     }
 
-    uint32 uiStage;
-    uint32 uiStage_timer;
+    uint8 m_uiStage;
+    uint32 m_uiStageTimer;
 
     void Reset()
     {
         m_creature->Mount(14338); // not sure about this id
-        uiStage = 1;
-        uiStage_timer = 3000;
+        m_uiStage = 1;
+        m_uiStageTimer = 3*IN_MILLISECONDS;
     }
 
-    void EnterCombat(Unit * /*who*/)
+    void EnterCombat(Unit* pWho)
     {
         DoScriptText(SAY_TREE2, m_creature);
         m_creature->Unmount();
-        uiStage = 0;
+        m_uiStage = 0;
     }
 
-    void MovementInform(uint32 type, uint32 id)
+    void MovementInform(uint32 m_uiType, uint32 m_uiId)
     {
-        if (type != POINT_MOTION_TYPE)
+        if (m_uiType != POINT_MOTION_TYPE)
             return;
 
-        if (id == 1)
-            uiStage = 2;
+        if (m_uiId == 1)
+            m_uiStage = 2;
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 uiDiff)
     {
-        if (uiStage && !m_creature->isInCombat())
+        if (m_uiStage && !m_creature->isInCombat())
         {
-            if (uiStage_timer <= diff)
+            if (m_uiStageTimer <= uiDiff)
             {
-                switch(uiStage)
+                switch(m_uiStage)
                 {
                     case 1:
                         m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
@@ -3707,14 +3707,19 @@ struct MANGOS_DLL_DECL mob_scarlet_courierAI : ScriptedAI
                             if (Unit *unit = tree->GetOwner())
                                 AttackStart(unit);
                         break;
-                    }
-                    uiStage_timer = 3000;
-                    uiStage = 0;
-                } else uiStage_timer -= diff;
-            }
+                    default:
+                        break;
+                }
 
-            DoMeleeAttackIfReady();
+                m_uiStageTimer = 3*IN_MILLISECONDS;
+                m_uiStage = 0;
+            }
+            else
+                m_uiStageTimer -= uiDiff;
         }
+
+        DoMeleeAttackIfReady();
+    }
 };
 
 CreatureAI* GetAI_npc_highlord_darion_mograine(Creature* pCreature)
