@@ -3641,6 +3641,82 @@ struct MANGOS_DLL_DECL npc_valkyr_battle_maidenAI : ScriptedAI
     }
 };
 
+
+//Scarlet courier
+enum ScarletCourierEnum
+{
+    SAY_TREE1               = -1609531,
+    SAY_TREE2               = -1609532,
+    GO_INCONSPICUOUS_TREE   = 191144,
+    NPC_SCARLET_COURIER     = 29076
+};
+
+struct MANGOS_DLL_DECL mob_scarlet_courierAI : ScriptedAI
+{
+    mob_scarlet_courierAI(Creature *pCreature) : ScriptedAI(pCreature) 
+    {
+        Reset();
+    }
+
+    uint32 uiStage;
+    uint32 uiStage_timer;
+
+    void Reset()
+    {
+        m_creature->Mount(14338); // not sure about this id
+        uiStage = 1;
+        uiStage_timer = 3000;
+    }
+
+    void EnterCombat(Unit * /*who*/)
+    {
+        DoScriptText(SAY_TREE2, m_creature);
+        m_creature->Unmount();
+        uiStage = 0;
+    }
+
+    void MovementInform(uint32 type, uint32 id)
+    {
+        if (type != POINT_MOTION_TYPE)
+            return;
+
+        if (id == 1)
+            uiStage = 2;
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (uiStage && !m_creature->isInCombat())
+        {
+            if (uiStage_timer <= diff)
+            {
+                switch(uiStage)
+                {
+                    case 1:
+                        m_creature->AddSplineFlag(SPLINEFLAG_WALKMODE);
+                        if (GameObject* tree = m_creature->GetClosestGameObjectWithEntry(m_creature,GO_INCONSPICUOUS_TREE, 40.0f))
+                        {
+                            DoScriptText(SAY_TREE1, m_creature);
+                            float x, y, z;
+                            tree->GetContactPoint(m_creature, x, y, z);
+                            m_creature->GetMotionMaster()->MovePoint(1, x, y, z);
+                        }
+                        break;
+                    case 2:
+                        if (GameObject* tree = m_creature->GetClosestGameObjectWithEntry(m_creature,GO_INCONSPICUOUS_TREE, 40.0f))
+                            if (Unit *unit = tree->GetOwner())
+                                AttackStart(unit);
+                        break;
+                    }
+                    uiStage_timer = 3000;
+                    uiStage = 0;
+                } else uiStage_timer -= diff;
+            }
+
+            DoMeleeAttackIfReady();
+        }
+};
+
 CreatureAI* GetAI_npc_highlord_darion_mograine(Creature* pCreature)
 { 
     return new npc_highlord_darion_mograineAI(pCreature);
@@ -3684,6 +3760,11 @@ CreatureAI* GetAI_npc_scourge_gryphon(Creature* pCreature)
 CreatureAI* GetAI_npc_valkyr_battle_maiden(Creature* pCreature)
 {
     return new npc_valkyr_battle_maidenAI(pCreature);
+};
+
+CreatureAI* GetAI_mob_scarlet_courier(Creature* pCreature)
+{
+    return new mob_scarlet_courierAI(pCreature);
 };
 
 void AddSC_ebon_hold()
@@ -3783,5 +3864,10 @@ void AddSC_ebon_hold()
     pNewScript = new Script;
     pNewScript->Name= "npc_valkyr_battle_maiden";
     pNewScript->GetAI = &GetAI_npc_valkyr_battle_maiden;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name= "mob_scarlet_courier";
+    pNewScript->GetAI = &GetAI_mob_scarlet_courier;
     pNewScript->RegisterSelf();
 }
