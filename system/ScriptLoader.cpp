@@ -8,6 +8,16 @@
 extern void AddSC_battleground();
 extern void AddSC_battlegroundSA();
 
+//Specialized Guards and world leader guards
+extern void AddSC_ancient_of_war();
+extern void AddSC_high_fire_mage();
+extern void AddSC_archbishop_benedictus();
+extern void AddSC_g_marcus_jonathan();
+extern void AddSC_high_sorcerer_andromath();
+extern void AddSC_highlord_bolvar_fordragon();
+extern void AddSC_city_officer();
+extern void AddSC_overlord_saurfang();
+
 //custom
 extern void AddSC_custom_gameobjects();
 extern void AddSC_custom_items();
@@ -557,6 +567,16 @@ void AddScripts()
     AddSC_npc_arena_honor();
     AddSC_mob_teleguy();
     AddSC_vip_master();
+
+    //Specialized Guards and world leader guards
+    AddSC_ancient_of_war();
+    AddSC_high_fire_mage();
+    AddSC_archbishop_benedictus();
+    AddSC_g_marcus_jonathan();
+    AddSC_high_sorcerer_andromath();
+    AddSC_highlord_bolvar_fordragon();
+    AddSC_city_officer();
+    AddSC_overlord_saurfang();
     
     // OutdoorPvP zone scripts
     // Must be _before_ map scripts call!
