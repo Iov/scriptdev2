@@ -94,9 +94,6 @@ void FreeScriptLibrary()
 
     m_scripts.clear();
 
-    for (std::map<std::string, Script*>::iterator itr = m_scriptStorage.begin(); itr != m_scriptStorage.end(); ++itr)
-        delete itr->second;
-
     num_sc_scripts = 0;
     SD2Database.HaltDelayThread();
 }
@@ -137,8 +134,6 @@ void InitScriptLibrary()
 
     // Resize script ids to needed ammount of assigned ScriptNames (from core)
     m_scripts.resize(GetScriptIdsCount(), NULL);
-
-    m_scriptStorage.clear();
 
     FillSpellSummary();
 
@@ -255,7 +250,7 @@ void Script::RegisterSelf(bool bReportError)
         if (bReportError)
             error_log("SD2: Script registering but ScriptName %s is not assigned in database. Script will not be used.", Name.c_str());
 
-        m_scriptStorage.insert(std::make_pair(Name.c_str(), this));
+        delete this;
     }
 }
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2011 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2011 ScriptDev2 <http://www.scriptdev2.com/>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -15,29 +15,29 @@
  */
 
 /* ScriptData
-SDName: outdoor_pvp_silithus
+SDName: Worldmap_kalimdor
 SD%Complete:
 SDComment:
-SDCategory: Outdoor PvP
+SDCategory: Kalimdor
 EndScriptData */
 
 #include "precompiled.h"
-#include "outdoor_pvp_silithus.h"
+#include "worldmap_kalimdor.h"
 
-outdoor_pvp_silithus::outdoor_pvp_silithus(Map* pMap) : OutdoorPvP(pMap),
+worldmap_kalimdor::worldmap_kalimdor(Map* pMap) : ScriptedInstance(pMap),
     m_uiResourcesAly(0),
     m_uiResourcesHorde(0),
-    m_uiLastControllerFaction(0){ }
+    m_uiLastControllerTeam(0){ }
 
-void outdoor_pvp_silithus::OnPlayerEnterZone(Player* pPlayer, uint32 uiZoneId)
+void worldmap_kalimdor::OnPlayerEnterZone(Player* pPlayer, uint32 uiZoneId)
 {
     if (uiZoneId == ZONE_ID_SILITHUS)
     {
-        if(pPlayer->GetTeam() == m_uiLastControllerFaction)
+        if(pPlayer->GetTeam() == m_uiLastControllerTeam)
             pPlayer->CastSpell(pPlayer, SPELL_CENARION_FAVOR, false);
 
         // add to the player set
-        sSilithusPlayers.insert(pPlayer->GetGUID());
+        m_suiSilithusPlayers.insert(pPlayer->GetGUID());
 
         // send actual world states
         SendPlayerWorldState(pPlayer);
@@ -48,12 +48,12 @@ void outdoor_pvp_silithus::OnPlayerEnterZone(Player* pPlayer, uint32 uiZoneId)
             pPlayer->RemoveAurasDueToSpell(SPELL_CENARION_FAVOR);
 
         // remove from the player set
-        if (sSilithusPlayers.find(pPlayer->GetGUID()) != sSilithusPlayers.end())
-            sSilithusPlayers.erase(pPlayer->GetGUID());
+        if (m_suiSilithusPlayers.find(pPlayer->GetGUID()) != m_suiSilithusPlayers.end())
+            m_suiSilithusPlayers.erase(pPlayer->GetGUID());
     }
 }
 
-void outdoor_pvp_silithus::SetData(uint32 uiType, uint32 uiData)
+void worldmap_kalimdor::SetData(uint32 uiType, uint32 uiData)
 {
     switch(uiType)
     {
@@ -66,7 +66,7 @@ void outdoor_pvp_silithus::SetData(uint32 uiType, uint32 uiData)
             if (GetData(TYPE_ALLIANCE_SILITHYSTS) == MAX_SILITHYST)
             {
                 SetData(TYPE_CONTROLLER_FACTION, ALLIANCE);
-                DoApplyTeamBuff(sSilithusPlayers, ALLIANCE, SPELL_CENARION_FAVOR);
+                DoProcessTeamBuff(ALLIANCE, SPELL_CENARION_FAVOR);
 
                 // send zone emote
                 //sWorld.SendZoneText(ZONE_ID_SILITHUS, ZONE_EMOTE_ALY_CAPTURE);
@@ -85,7 +85,7 @@ void outdoor_pvp_silithus::SetData(uint32 uiType, uint32 uiData)
             if (GetData(TYPE_HORDE_SILITHYSTS) == MAX_SILITHYST)
             {
                 SetData(TYPE_CONTROLLER_FACTION, HORDE);
-                DoApplyTeamBuff(sSilithusPlayers, HORDE, SPELL_CENARION_FAVOR);
+                DoProcessTeamBuff(HORDE, SPELL_CENARION_FAVOR);
 
                 // send zone emote
                 //sWorld.SendZoneText(ZONE_ID_SILITHUS, ZONE_EMOTE_HORDE_CAPTURE);
@@ -96,28 +96,15 @@ void outdoor_pvp_silithus::SetData(uint32 uiType, uint32 uiData)
             }
             break;
         case TYPE_CONTROLLER_FACTION:
-            m_uiLastControllerFaction = uiData;
+            m_uiLastControllerTeam = uiData;
             break;
     }
 
     // update states
     UpdateZoneWorldState();
-
-    if (uiData)
-    {
-        OUT_SAVE_PVP_DATA;
-
-        std::ostringstream saveStream;
-        saveStream << m_uiResourcesAly << " " << m_uiResourcesHorde << " " << m_uiLastControllerFaction;
-
-        strInstData = saveStream.str();
-
-        SaveToDB();
-        OUT_SAVE_PVP_DATA_COMPLETE;
-    }
 }
 
-uint32 outdoor_pvp_silithus::GetData(uint32 uiType)
+uint32 worldmap_kalimdor::GetData(uint32 uiType)
 {
     switch(uiType)
     {
@@ -126,70 +113,72 @@ uint32 outdoor_pvp_silithus::GetData(uint32 uiType)
         case TYPE_HORDE_SILITHYSTS:
             return m_uiResourcesHorde;
         case TYPE_CONTROLLER_FACTION:
-            return m_uiLastControllerFaction;
+            return m_uiLastControllerTeam;
     }
     return 0;
 }
 
-void outdoor_pvp_silithus::Load(const char* chrIn)
+void worldmap_kalimdor::UpdateZoneWorldState()
 {
-    if (!chrIn)
-    {
-        OUT_LOAD_PVP_DATA_FAIL;
-        return;
-    }
-
-    OUT_LOAD_PVP_DATA(chrIn);
-
-    std::istringstream loadStream(chrIn);
-    loadStream >> m_uiResourcesAly >> m_uiResourcesHorde >> m_uiLastControllerFaction;
-
-    OUT_LOAD_PVP_DATA_COMPLETE;
+    DoUpdateZoneWorldState(WORLD_STATE_SI_GATHERED_A, m_uiResourcesAly);
+    DoUpdateZoneWorldState(WORLD_STATE_SI_GATHERED_H, m_uiResourcesHorde);
 }
 
-void outdoor_pvp_silithus::UpdateZoneWorldState()
-{
-    DoUpdateWorldState(sSilithusPlayers, WORLD_STATE_SI_GATHERED_A, m_uiResourcesAly);
-    DoUpdateWorldState(sSilithusPlayers, WORLD_STATE_SI_GATHERED_H, m_uiResourcesHorde);
-}
-
-void outdoor_pvp_silithus::SendPlayerWorldState(Player* pPlayer)
+void worldmap_kalimdor::SendPlayerWorldState(Player* pPlayer)
 {
     pPlayer->SendUpdateWorldState(WORLD_STATE_SI_GATHERED_A, m_uiResourcesAly);
     pPlayer->SendUpdateWorldState(WORLD_STATE_SI_GATHERED_H, m_uiResourcesHorde);
     pPlayer->SendUpdateWorldState(WORLD_STATE_SI_SILITHYST_MAX, MAX_SILITHYST);
 }
 
-void outdoor_pvp_silithus::OnPlayerDroppedFlag(Player* pPlayer, uint32 uiSpellId)
+void worldmap_kalimdor::DoUpdateZoneWorldState(uint32 uiStateId, uint32 uiStateData)
+{
+    for(std::set<uint64>::const_iterator itr = m_suiSilithusPlayers.begin(); itr != m_suiSilithusPlayers.end(); ++itr)
+    {
+        if (Player* pPlayer = instance->GetPlayer(*itr))
+            pPlayer->SendUpdateWorldState(uiStateId, uiStateData);
+    }
+}
+
+void worldmap_kalimdor::DoProcessTeamBuff(Team uiTeamId, uint32 uiSpellId, bool bRemove /*= false*/)
+{
+    for(std::set<uint64>::const_iterator itr = m_suiSilithusPlayers.begin(); itr != m_suiSilithusPlayers.end(); ++itr)
+    {
+        if (Player* pPlayer = instance->GetPlayer(*itr))
+        {
+            if (pPlayer->GetTeam() == uiTeamId)
+            {
+                if (!bRemove)
+                    pPlayer->CastSpell(pPlayer, uiSpellId, true);
+                else
+                {
+                    if (pPlayer->HasAura(uiSpellId))
+                        pPlayer->RemoveAurasDueToSpell(uiSpellId);
+                }
+            }
+        }
+    }
+}
+
+void worldmap_kalimdor::OnPlayerDroppedFlag(Player* pPlayer, uint32 uiSpellId)
 {
     if (uiSpellId != SPELL_SILITHYST)
         return;
 
-    // ToDo
-    // * make it drop by damage - core issue
-    // * exclude the case when it's dropped near the area trigger
+    // don't drop flag at area trigger
+    switch(pPlayer->GetTeam())
+    {
+        case ALLIANCE:
+            if (pPlayer->IsWithinDist3d(m_aSilithusLocs[0].m_fX, m_aSilithusLocs[0].m_fY, m_aSilithusLocs[0].m_fZ, 5.0f))
+                return;
+            break;
+        case HORDE:
+            if (pPlayer->IsWithinDist3d(m_aSilithusLocs[1].m_fX, m_aSilithusLocs[1].m_fY, m_aSilithusLocs[1].m_fZ, 5.0f))
+                return;
+            break;
+    }
 
-    //switch(pPlayer->GetTeam())
-    //{
-    //    case ALLIANCE:
-    //        if (AreaTriggerEntry const* atEntry = sAreaTriggerStore.LookupEntry(AREATRIGGER_SILITHUS_ALY))
-    //        {
-    //            // 5.0f is safe-distance; else drop the flag
-    //            if (pPlayer->GetDistance(atEntry->x, atEntry->y, atEntry->z) < 5.0f + atEntry->radius)
-    //                return;
-    //        }
-    //        break;
-    //    case HORDE:
-    //        if (AreaTriggerEntry const* atEntry = sAreaTriggerStore.LookupEntry(AREATRIGGER_SILITHUS_HORDE))
-    //        {
-    //            // 5.0f is safe-distance; else drop the flag
-    //            if (pPlayer->GetDistance(atEntry->x, atEntry->y, atEntry->z) < 5.0f + atEntry->radius)
-    //                return;
-    //        }
-    //        break;
-    //}
-
-    // drop the flag if conditions are ok
+    // drop the flag in other case
     pPlayer->CastSpell(pPlayer, SPELL_SILITHYST_FLAG_DROP, true);
 }
 
@@ -198,9 +187,9 @@ bool AreaTrigger_at_silithus(Player* pPlayer, AreaTriggerEntry const* pAt)
     if (pPlayer->isGameMaster() || pPlayer->isDead())
         return false;
 
-    outdoor_pvp_silithus* pOutdoorPvp = (outdoor_pvp_silithus*)pPlayer->GetInstanceData();
+    worldmap_kalimdor* pWorldMap = (worldmap_kalimdor*)pPlayer->GetInstanceData();
 
-    if (!pOutdoorPvp)
+    if (!pWorldMap)
         return false;
 
     if (pAt->id == AREATRIGGER_SILITHUS_ALY)
@@ -209,7 +198,7 @@ bool AreaTrigger_at_silithus(Player* pPlayer, AreaTriggerEntry const* pAt)
         {
             // remove aura
             pPlayer->RemoveAurasDueToSpell(SPELL_SILITHYST);
-            pOutdoorPvp->SetData(TYPE_ALLIANCE_SILITHYSTS, 1);
+            pWorldMap->SetData(TYPE_ALLIANCE_SILITHYSTS, 1);
 
             // reward the player
             pPlayer->CastSpell(pPlayer, SPELL_TRACES_OF_SILITHYST, false);
@@ -227,7 +216,7 @@ bool AreaTrigger_at_silithus(Player* pPlayer, AreaTriggerEntry const* pAt)
         {
             // remove aura
             pPlayer->RemoveAurasDueToSpell(SPELL_SILITHYST);
-            pOutdoorPvp->SetData(TYPE_HORDE_SILITHYSTS, 1);
+            pWorldMap->SetData(TYPE_HORDE_SILITHYSTS, 1);
 
             // reward the player
             pPlayer->CastSpell(pPlayer, SPELL_TRACES_OF_SILITHYST, false);
@@ -252,12 +241,12 @@ bool GOUse_go_silithyst(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-InstanceData* GetInstanceData_outdoor_pvp_silithus(Map* pMap)
+InstanceData* GetInstanceData_worldmap_kalimdor(Map* pMap)
 {
-    return new outdoor_pvp_silithus(pMap);
+    return new worldmap_kalimdor(pMap);
 }
 
-void AddSC_outdoor_pvp_silithus()
+void AddSC_worldmap_kalimdor()
 {
     Script* pNewScript;
 
@@ -272,7 +261,7 @@ void AddSC_outdoor_pvp_silithus()
     pNewScript->RegisterSelf();
 
     pNewScript = new Script;
-    pNewScript->Name = "outdoor_pvp_silithus";
-    pNewScript->GetInstanceData = &GetInstanceData_outdoor_pvp_silithus;
+    pNewScript->Name = "worldmap_kalimdor";
+    pNewScript->GetInstanceData = &GetInstanceData_worldmap_kalimdor;
     pNewScript->RegisterSelf();
 }

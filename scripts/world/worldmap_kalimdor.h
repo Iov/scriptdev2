@@ -1,9 +1,9 @@
-/* Copyright (C) 2006 - 2011 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2011 ScriptDev2 <http://www.scriptdev2.com/>
  * This program is free software licensed under GPL version 2
  * Please see the included DOCS/LICENSE.TXT for more information */
 
-#ifndef OUTDOOR_PVP_SILITHUS_H
-#define OUTDOOR_PVP_SILITHUS_H
+#ifndef WORLDMAP_KALIMDOR_H
+#define WORLDMAP_KALIMDOR_H
 
 enum
 {
@@ -34,14 +34,15 @@ enum
     ZONE_ID_SILITHUS                = 1377,
     ZONE_ID_TEMPLE_OF_AQ            = 3428,         // ToDo - research
     ZONE_ID_RUINS_OF_AQ             = 3429,         // don't know yet how to handle the buff inside the instances
+    ZONE_ID_GATES_OF_AQ             = 3478,         // not sure if needed
 
     // area triggers
     AREATRIGGER_SILITHUS_ALY        = 4162,         // areatriggers ids
     AREATRIGGER_SILITHUS_HORDE      = 4168,
 
     // zone emotes
-    ZONE_EMOTE_HORDE_CAPTURE        = -1001000,
-    ZONE_EMOTE_ALY_CAPTURE          = -1001001,
+    //ZONE_EMOTE_HORDE_CAPTURE        = -1001000,
+    //ZONE_EMOTE_ALY_CAPTURE          = -1001001,
 
     FACTION_CENARION_CIRCLE         = 609,
     HONOR_REWARD_SILITHYST          = 19,
@@ -54,11 +55,22 @@ enum
     WORLD_STATE_SI_SILITHYST_MAX    = 2317,
 };
 
-class MANGOS_DLL_DECL outdoor_pvp_silithus : public OutdoorPvP
+struct sKalimdorLocation
+{
+    float m_fX, m_fY, m_fZ;
+};
+
+static sKalimdorLocation m_aSilithusLocs[2] =
+{
+    {-7142.04f, 1397.92f, 4.327f},      // aly
+    {-7588.48f, 756.806f, -16.425f}     // horde
+};
+
+class MANGOS_DLL_DECL worldmap_kalimdor : public ScriptedInstance
 {
     public:
-        outdoor_pvp_silithus(Map* pMap);
-        ~outdoor_pvp_silithus() {}
+        worldmap_kalimdor(Map* pMap);
+        ~worldmap_kalimdor() {}
 
         void OnPlayerEnterZone(Player* pPlayer, uint32 uiZoneId);
         void OnPlayerDroppedFlag(Player* pPlayer, uint32 uiSpellId);
@@ -66,20 +78,20 @@ class MANGOS_DLL_DECL outdoor_pvp_silithus : public OutdoorPvP
         void SetData(uint32 uiType, uint32 uiData);
         uint32 GetData(uint32 uiType);
 
-        const char* Save() { return strInstData.c_str(); }
-        void Load(const char* chrIn);
-
     protected:
         void UpdateZoneWorldState();
         void SendPlayerWorldState(Player* pPlayer);
 
-        std::string strInstData;
+        // Sends world state update to all players in the current zone; they are stored in a PlayerSet
+        void DoUpdateZoneWorldState(uint32 uiStateId, uint32 uiStateData);
+        // Process a spell a spell event (cast or remove) to a specific team in a specific zone;  they are stored in a PlayerSet
+        void DoProcessTeamBuff(Team uiTeamId, uint32 uiSpellId, bool bRemove = false);
 
         uint32 m_uiResourcesAly;
         uint32 m_uiResourcesHorde;
-        uint32 m_uiLastControllerFaction;
+        uint32 m_uiLastControllerTeam;
 
-        PlayerSet sSilithusPlayers;
+        std::set<uint64> m_suiSilithusPlayers;
 };
 
 #endif

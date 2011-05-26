@@ -32,16 +32,6 @@ extern void AddSC_npc_arena_honor();
 extern void AddSC_mob_teleguy();
 extern void AddSC_vip_master();
 
-// OutdoorPvP
-extern void AddSC_outdoor_pvp_eastern_kingdoms();
-extern void AddSC_outdoor_pvp_kalimdor();
-extern void AddSC_outdoor_pvp_northrend();
-extern void AddSC_outdoor_pvp_outland();
-
-// OutdoorPvP zone scripts
-extern void AddSC_outdoor_pvp_eastern_plaguelands();
-extern void AddSC_outdoor_pvp_silithus();
-
 //examples
 extern void AddSC_example_creature();
 extern void AddSC_example_escort();
@@ -58,6 +48,9 @@ extern void AddSC_item_scripts();
 extern void AddSC_npc_professions();
 extern void AddSC_npcs_special();
 extern void AddSC_spell_scripts();
+extern void AddSC_worldmap_eastern_kingdoms();
+extern void AddSC_worldmap_kalimdor();
+extern void AddSC_worldmap_outland();
 
 //eastern kingdoms
 extern void AddSC_blackrock_depths();                       //blackrock_depths
@@ -592,17 +585,6 @@ void AddScripts()
     AddSC_highlord_bolvar_fordragon();
     AddSC_city_officer();
     AddSC_overlord_saurfang();
-    
-    // OutdoorPvP zone scripts
-    // Must be _before_ map scripts call!
-    AddSC_outdoor_pvp_eastern_plaguelands();
-    AddSC_outdoor_pvp_silithus();
-
-    // OutdoorPvP
-    AddSC_outdoor_pvp_eastern_kingdoms();
-    AddSC_outdoor_pvp_kalimdor();
-    AddSC_outdoor_pvp_northrend();
-    AddSC_outdoor_pvp_outland();
 
     //examples
     AddSC_example_creature();
@@ -620,6 +602,9 @@ void AddScripts()
     AddSC_npc_professions();
     AddSC_npcs_special();
     AddSC_spell_scripts();
+    AddSC_worldmap_eastern_kingdoms();
+    AddSC_worldmap_kalimdor();
+    AddSC_worldmap_outland();
 
     //eastern kingdoms
     AddSC_blackrock_depths();                               //blackrock_depths
