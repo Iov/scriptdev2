@@ -1,3 +1,8 @@
+-- Fix for quest Bury those cockroaches!
+
+UPDATE creature_template SET ScriptName='npc_seaforium_depth_charge' WHERE entry=25401;
+
+---------------------------------------------------------------------------------------------------------------------
 -- The Nexus - The Nexus
 
 UPDATE `creature_template` SET scriptname = 'boss_commander_stoutbeard' where entry = '26796';
