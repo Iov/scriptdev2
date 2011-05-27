@@ -3,6 +3,18 @@
 UPDATE creature_template SET ScriptName='npc_seaforium_depth_charge' WHERE entry=25401;
 
 ---------------------------------------------------------------------------------------------------------------------
+-- Fix for quest Mistery of the infinite
+
+UPDATE creature_template SET
+ScriptName='npc_hourglass'
+WHERE entry=27840;
+
+
+DELETE from creature_ai_scripts WHERE id=2790002;
+INSERT into creature_ai_scripts VALUES
+(2790002,27900,6,0,100,0,0,0,0,0,15,12470,6,0,0,0,0,0,0,0,0,0,'Infinite Timerender - Quest Credit after death');
+
+---------------------------------------------------------------------------------------------------------------------
 -- The Nexus - The Nexus
 
 UPDATE `creature_template` SET scriptname = 'boss_commander_stoutbeard' where entry = '26796';
