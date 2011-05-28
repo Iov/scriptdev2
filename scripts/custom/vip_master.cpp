@@ -20,12 +20,12 @@ by Nezz
 
 #include "precompiled.h"
 
-#define HOW_TO_BECOME_VIP    "Wie kann ich VIP werden?"
-#define QUESTLIST            "Ich möchte meine VIP Quest beginnen."
-#define VENDORLIST           "Zeigt mir eure Waren."
-#define NEWS                 "Erzähl mir die News."
-#define STARTED_VIP_QUEST    "Danke, dass du gespendet hast."
-#define TRAINLIST            "Ich möchte mich weiterbilden"
+#define HOW_TO_BECOME_VIP    "how to become a VIP?"
+#define QUESTLIST            "vip quest list."
+#define VENDORLIST           "vip vendorlist."
+#define NEWS                 "News."
+#define STARTED_VIP_QUEST    "start_vip_quest."
+#define TRAINLIST            "vip trainer list"
 
 struct MANGOS_DLL_DECL vip_masterAI : public ScriptedAI
 {
