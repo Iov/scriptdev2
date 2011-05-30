@@ -2923,11 +2923,11 @@ struct MANGOS_DLL_DECL pet_spring_rabbitAI : public PetAI
 
     void MoveInLineOfSight(Unit* pWho)
     {
-        if (!m_bIsInLove && !m_bIsClient && roll_chance_i(10))
+        if (IsHolidayActive(HOLIDAY_NOBLEGARDEN) && !m_bIsInLove && !m_bIsClient && roll_chance_i(10))
         {
             if (m_creature->GetDistance(pWho) <= 6.0f)
             { 
-                if (((Creature*)pWho)->IsPet())
+                if ((pWho->GetEntry() == NPC_SPRING_RABBIT) && ((Creature*)pWho)->IsPet())
                 {
                     m_bIsInLove = true;
                     m_uiLoverGUID = ((Creature*)pWho)->GetGUID();
