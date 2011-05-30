@@ -144,6 +144,12 @@ enum
     GO_CACHE_OF_INOV_HARD       = 194957,
     GO_CACHE_OF_INOV_HARD_H     = 194958,
 
+    // towers
+    GO_TOWER_OF_FROST           = 194370,
+    GO_TOWER_OF_FLAMES          = 194371,
+    GO_TOWER_OF_LIFE            = 194375,
+    GO_TOWER_OF_STORMS          = 194377,
+
     // doors
     // the siege
     GO_SHIELD_WALL              = 194416,
