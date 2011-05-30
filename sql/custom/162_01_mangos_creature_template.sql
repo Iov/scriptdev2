@@ -131,3 +131,7 @@ UPDATE `creature_template` SET `ScriptName`='npc_harnessed_icemaw_matriarch', `f
 -- Quest Ambush at the Overlook
 
 UPDATE `creature_template` SET `ScriptName`='mob_scarlet_courier' WHERE `entry`='29076';
+
+-- Instance Forge of Souls
+
+UPDATE `creature_template` SET `ScriptName`='npc_corrupted_soul_fragment' WHERE `entry`='36535';
