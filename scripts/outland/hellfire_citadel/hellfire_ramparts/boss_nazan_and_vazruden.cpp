@@ -36,6 +36,8 @@ enum
     SAY_DEATH               = -1543024,
     EMOTE_DESCEND           = -1543025,
 
+    SPELL_SUMMON_VAZRUDEN   = 30717,
+
     //vazruden
     SPELL_REVENGE           = 40392,
 
@@ -53,9 +55,7 @@ enum
     POINT_ID_FLYING         = 101,
     POINT_ID_COMBAT         = 102,
 
-    NPC_VAZRUDEN_HERALD     = 17307,
     NPC_NAZAN               = 17536,
-    NPC_VAZRUDEN            = 17537
 };
 
 const float afCenterPos[3] = {-1399.401f, 1736.365f, 87.008f}; //moves here to drop off nazan
@@ -98,6 +98,12 @@ struct MANGOS_DLL_DECL boss_vazrudenAI : public ScriptedAI
             m_pInstance->SetData(TYPE_VAZRUDEN, DONE);
     }
 
+    void JustReachedHome()
+    {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_VAZRUDEN, FAIL);
+    }
+
     void KilledUnit(Unit* pVictim)
     {
         DoScriptText(urand(0, 1) ? SAY_KILL1 : SAY_KILL2, m_creature);
@@ -105,7 +111,7 @@ struct MANGOS_DLL_DECL boss_vazrudenAI : public ScriptedAI
 
     void PrepareAndDescendMount()
     {
-        if (Creature* pHerald = m_pInstance->instance->GetCreature(m_pInstance->GetData64(DATA_HERALD)))
+        if (Creature* pHerald = m_pInstance->instance->GetCreature(m_pInstance->GetData64(NPC_VAZRUDEN_HERALD)))
         {
             if (pHerald->HasSplineFlag(SPLINEFLAG_WALKMODE))
                 pHerald->RemoveSplineFlag(SPLINEFLAG_WALKMODE);
@@ -236,7 +242,8 @@ struct MANGOS_DLL_DECL boss_vazruden_heraldAI : public ScriptedAI
                     break;
                 }
                 case POINT_ID_FLYING:
-                    m_uiFireballTimer = 3000;
+                    if (m_bIsEventInProgress)               // Additional check for wipe case, while nazan is flying to this point
+                        m_uiFireballTimer = 3000;
                     break;
             }
         }
@@ -264,7 +271,7 @@ struct MANGOS_DLL_DECL boss_vazruden_heraldAI : public ScriptedAI
     {
         m_creature->UpdateEntry(NPC_NAZAN);
 
-        m_creature->SummonCreature(NPC_VAZRUDEN, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 0);
+        DoCastSpellIfCan(m_creature, SPELL_SUMMON_VAZRUDEN);
 
         m_uiMovementTimer = 3000;
 
@@ -290,6 +297,12 @@ struct MANGOS_DLL_DECL boss_vazruden_heraldAI : public ScriptedAI
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NAZAN, DONE);
+    }
+
+    void JustReachedHome()
+    {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_NAZAN, FAIL);
     }
 
     void UpdateAI(const uint32 uiDiff)

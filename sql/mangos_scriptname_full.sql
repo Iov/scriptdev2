@@ -681,6 +681,7 @@ UPDATE creature_template SET ScriptName='npc_silvermoon_harry' WHERE entry=24539
 
 /* FORGE OF SOULS */
 UPDATE creature_template SET ScriptName='boss_bronjahm' WHERE entry=36497;
+UPDATE creature_template SET ScriptName='npc_corrupted_soul_fragment' WHERE entry=36535;
 UPDATE creature_template SET ScriptName='boss_devourer_of_souls' WHERE entry=36502;
 UPDATE instance_template SET ScriptName='instance_forge_of_souls' WHERE map=632;
 
@@ -883,6 +884,7 @@ UPDATE creature_template SET ScriptName='npc_thrall_warchief' WHERE entry=4949;
 /* RAZORFEN DOWNS */
 UPDATE creature_template SET ScriptName='boss_amnennar_the_coldbringer' WHERE entry=7358;
 UPDATE creature_template SET ScriptName='npc_henry_stern' WHERE entry=8696;
+UPDATE creature_template SET ScriptName='npc_belnistrasz' WHERE entry=8516;
 
 /* RAZORFEN KRAUL */
 UPDATE instance_template SET ScriptName='instance_razorfen_kraul' WHERE map=47;
