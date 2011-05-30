@@ -2927,7 +2927,7 @@ struct MANGOS_DLL_DECL pet_spring_rabbitAI : public PetAI
         {
             if (m_creature->GetDistance(pWho) <= 6.0f)
             { 
-                if (((Creature*)pWho)->IsPet())
+                if ((pWho->GetEntry() == NPC_SPRING_RABBIT) && ((Creature*)pWho)->IsPet())
                 {
                     m_bIsInLove = true;
                     m_uiLoverGUID = ((Creature*)pWho)->GetGUID();
