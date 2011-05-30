@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Ulduar teleport
 SD%Complete:
-SDComment:
+SDComment: 
 SDCategory: Ulduar
 EndScriptData */
 
@@ -170,32 +170,33 @@ bool GossipSelect_thorim_image(Player* pPlayer, Creature* pCreature, uint32 uiSe
     return true;
 }
 
+
+
 void AddSC_ulduar()
 {
-    Script *newscript;
+    Script *pNewscript;
 
-    newscript = new Script;
-    newscript->Name = "hodir_image";
-    newscript->pGossipHello = &GossipHello_hodir_image;
-    newscript->pGossipSelect = &GossipSelect_hodir_image;
-    newscript->RegisterSelf();
+    pNewscript = new Script;
+    pNewscript->Name = "hodir_image";
+    pNewscript->pGossipHello = &GossipHello_hodir_image;
+    pNewscript->pGossipSelect = &GossipSelect_hodir_image;
+    pNewscript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "freya_image";
-    newscript->pGossipHello = &GossipHello_freya_image;
-    newscript->pGossipSelect = &GossipSelect_freya_image;
-    newscript->RegisterSelf();
+    pNewscript = new Script;
+    pNewscript->Name = "freya_image";
+    pNewscript->pGossipHello = &GossipHello_freya_image;
+    pNewscript->pGossipSelect = &GossipSelect_freya_image;
+    pNewscript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "thorim_image";
-    newscript->pGossipHello = &GossipHello_thorim_image;
-    newscript->pGossipSelect = &GossipSelect_thorim_image;
-    newscript->RegisterSelf();
+    pNewscript = new Script;
+    pNewscript->Name = "thorim_image";
+    pNewscript->pGossipHello = &GossipHello_thorim_image;
+    pNewscript->pGossipSelect = &GossipSelect_thorim_image;
+    pNewscript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "mimiron_image";
-    newscript->pGossipHello = &GossipHello_mimiron_image;
-    newscript->pGossipSelect = &GossipSelect_mimiron_image;
-    newscript->RegisterSelf();
-
+    pNewscript = new Script;
+    pNewscript->Name = "mimiron_image";
+    pNewscript->pGossipHello = &GossipHello_mimiron_image;
+    pNewscript->pGossipSelect = &GossipSelect_mimiron_image;
+    pNewscript->RegisterSelf();
 }
