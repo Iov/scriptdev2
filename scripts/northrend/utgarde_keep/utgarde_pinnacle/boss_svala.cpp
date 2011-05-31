@@ -218,6 +218,7 @@ struct MANGOS_DLL_DECL boss_svalaAI : public ScriptedAI
             m_creature->UpdateEntry(NPC_SVALA_SORROW);
             m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
             m_creature->AddSplineFlag(SPLINEFLAG_FLYING);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         }
     }
 
