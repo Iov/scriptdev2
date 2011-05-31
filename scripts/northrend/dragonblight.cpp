@@ -328,6 +328,90 @@ bool GossipSelect_npc_torastrasza(Player* pPlayer, Creature* pCreature, uint32 u
 }
 
 /*######
+## npc_hourglass_of_eternity
+######*/
+/*Support for 'Future you' is currently missing*/
+enum
+{
+    NPC_INFINITE_CHRONO_MAGUS    = 27898,
+    NPC_INFINITE_ASSAILANT       = 27896,
+    NPC_INFINITE_DESTROYER       = 27897,
+    NPC_INFINITE_TIMERENDER      = 27900,
+    QUEST_MYSTERY_OF_INFINITE    = 12470
+
+};
+
+struct MANGOS_DLL_DECL npc_hourglassAI : public ScriptedAI
+{
+    npc_hourglassAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    uint64 uiWaveTimer;
+    uint32 uiWaveCounter;
+
+     void Reset()
+     {
+         uiWaveTimer = 5000;
+         uiWaveCounter = 0;
+     }
+
+     void JustSummoned(Creature* pSummoned)
+     {
+         pSummoned->AI()->AttackStart(m_creature);
+     }
+
+     void JustDied(Unit* pKiller)
+     {
+        if(Player *pPlayer = m_creature->GetMap()->GetPlayer(m_creature->GetOwnerGuid()))
+        {
+            pPlayer->FailQuest(QUEST_MYSTERY_OF_INFINITE);
+        }
+     }
+
+     void SummonWave()
+     {
+         switch(uiWaveCounter)
+         {
+            case 0: m_creature->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, m_creature->GetPositionX()+5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    m_creature->SummonCreature(NPC_INFINITE_ASSAILANT, m_creature->GetPositionX()-5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    break;
+            case 1: m_creature->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, m_creature->GetPositionX()+5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    m_creature->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, m_creature->GetPositionX()-5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    break;
+            case 2: m_creature->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, m_creature->GetPositionX()+5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    m_creature->SummonCreature(NPC_INFINITE_ASSAILANT, m_creature->GetPositionX()-5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    m_creature->SummonCreature(NPC_INFINITE_DESTROYER, m_creature->GetPositionX()+5,m_creature->GetPositionY()+5 ,m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    break;
+            case 3: m_creature->SummonCreature(NPC_INFINITE_CHRONO_MAGUS, m_creature->GetPositionX()+5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    m_creature->SummonCreature(NPC_INFINITE_ASSAILANT, m_creature->GetPositionX()-5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    m_creature->SummonCreature(NPC_INFINITE_DESTROYER, m_creature->GetPositionX()+5,m_creature->GetPositionY()+5 ,m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                    break;
+            case 4: m_creature->SummonCreature(NPC_INFINITE_TIMERENDER, m_creature->GetPositionX()+5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
+                    break;
+
+         }
+     }
+     void UpdateAI(const uint32 uiDiff)
+     {
+            if (uiWaveTimer <= uiDiff)
+            {
+                if(uiWaveCounter<=4)
+                {
+                    SummonWave();
+                    uiWaveTimer = 15000;
+                    uiWaveCounter++;
+                }
+                else m_creature->ForcedDespawn();
+
+            } else uiWaveTimer -= uiDiff;
+     }
+};
+
+CreatureAI* GetAI_npc_hourglass(Creature* pCreature)
+{
+    return new npc_hourglassAI(pCreature);
+}
+
+/*#####
 ## npc_warsong_battle_standart
 ######*/
 
@@ -350,7 +434,7 @@ struct MANGOS_DLL_DECL npc_warsong_battle_standartAI : public Scripted_NoMovemen
 
     uint8 m_uiCycle;
     uint32 m_uiSummonTimer;
-    void Reset() 
+    void Reset()
     {
         m_uiSummonTimer = 5000;
     }
@@ -403,7 +487,7 @@ struct MANGOS_DLL_DECL npc_warsong_battle_standartAI : public Scripted_NoMovemen
         }
         else
             m_uiSummonTimer -= uiDiff;
-    }    
+    }
 };
 
 CreatureAI* GetAI_npc_warsong_battle_standart(Creature* pCreature)
@@ -442,6 +526,11 @@ void AddSC_dragonblight()
     pNewScript->Name = "npc_torastrasza";
     pNewScript->pGossipHello = &GossipHello_npc_torastrasza;
     pNewScript->pGossipSelect = &GossipSelect_npc_torastrasza;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_hourglass";
+    pNewScript->GetAI = &GetAI_npc_hourglass;
     pNewScript->RegisterSelf();
 
     pNewScript = new Script;

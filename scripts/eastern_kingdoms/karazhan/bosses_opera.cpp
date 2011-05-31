@@ -28,63 +28,66 @@ EndScriptData */
 /*** OPERA WIZARD OF OZ EVENT *****/
 /*********************************/
 
-#define SAY_DOROTHEE_DEATH          -1532025
-#define SAY_DOROTHEE_SUMMON         -1532026
-#define SAY_DOROTHEE_TITO_DEATH     -1532027
-#define SAY_DOROTHEE_AGGRO          -1532028
+enum
+{
+    SAY_DOROTHEE_DEATH         = -1532025,
+    SAY_DOROTHEE_SUMMON        = -1532026,
+    SAY_DOROTHEE_TITO_DEATH    = -1532027,
+    SAY_DOROTHEE_AGGRO         = -1532028,
 
-#define SAY_ROAR_AGGRO              -1532029
-#define SAY_ROAR_DEATH              -1532030
-#define SAY_ROAR_SLAY               -1532031
+    SAY_ROAR_AGGRO             = -1532029,
+    SAY_ROAR_DEATH             = -1532030,
+    SAY_ROAR_SLAY              = -1532031,
 
-#define SAY_STRAWMAN_AGGRO          -1532032
-#define SAY_STRAWMAN_DEATH          -1532033
-#define SAY_STRAWMAN_SLAY           -1532034
+    SAY_STRAWMAN_AGGRO         = -1532032,
+    SAY_STRAWMAN_DEATH         = -1532033,
+    SAY_STRAWMAN_SLAY          = -1532034,
 
-#define SAY_TINHEAD_AGGRO           -1532035
-#define SAY_TINHEAD_DEATH           -1532036
-#define SAY_TINHEAD_SLAY            -1532037
-#define EMOTE_RUST                  -1532038
+    SAY_TINHEAD_AGGRO          = -1532035,
+    SAY_TINHEAD_DEATH          = -1532036,
+    SAY_TINHEAD_SLAY           = -1532037,
+    EMOTE_RUST                 = -1532038,
 
-#define SAY_CRONE_AGGRO             -1532039
-#define SAY_CRONE_AGGRO2            -1532040
-#define SAY_CRONE_DEATH             -1532041
-#define SAY_CRONE_SLAY              -1532042
+    SAY_CRONE_AGGRO            = -1532039,
+    SAY_CRONE_AGGRO2           = -1532040,
+    SAY_CRONE_DEATH            = -1532041,
+    SAY_CRONE_SLAY             = -1532042,
 
 /**** Spells ****/
-// Dorothee
-#define SPELL_WATERBOLT         31012
-#define SPELL_SCREAM            31013
-#define SPELL_SUMMONTITO        31014
+    // Dorothee
+    SPELL_WATERBOLT        = 31012,
+    SPELL_SCREAM           = 31013,
+    SPELL_SUMMONTITO       = 31014,
 
-// Tito
-#define SPELL_YIPPING           31015
+    // Tito
+    SPELL_YIPPING          = 31015,
 
-// Strawman
-#define SPELL_BRAIN_BASH        31046
-#define SPELL_BRAIN_WIPE        31069
-#define SPELL_BURNING_STRAW     31075
+    // Strawman
+    SPELL_BRAIN_BASH       = 31046,
+    SPELL_BRAIN_WIPE       = 31069,
+    SPELL_BURNING_STRAW    = 31075,
 
-// Tinhead
-#define SPELL_CLEAVE            31043
-#define SPELL_RUST              31086
+    // Tinhead
+    SPELL_CLEAVE           = 31043,
+    SPELL_RUST             = 31086,
 
-// Roar
-#define SPELL_MANGLE            31041
-#define SPELL_SHRED             31042
-#define SPELL_FRIGHTENED_SCREAM 31013
+    // Roar
+    SPELL_MANGLE           = 31041,
+    SPELL_SHRED            = 31042,
+    SPELL_FRIGHTENED_SCREAM  = 31013,
 
-// Crone
-#define SPELL_CHAIN_LIGHTNING   32337
+    // Crone
+    SPELL_CHAIN_LIGHTNING  = 32337,
 
-// Cyclone
-#define SPELL_KNOCKBACK         32334
-#define SPELL_CYCLONE_VISUAL    32332
+    // Cyclone
+    SPELL_KNOCKBACK        = 32334,
+    SPELL_CYCLONE_VISUAL   = 32332,
 
 /** Creature Entries **/
-#define CREATURE_TITO           17548
-#define CREATURE_CYCLONE        18412
-#define CREATURE_CRONE          18168
+    CREATURE_TITO          = 17548,
+    CREATURE_CYCLONE       = 18412,
+    CREATURE_CRONE         = 18168
+};
 
 void SummonCroneIfReady(ScriptedInstance* pInstance, Creature* pCreature)
 {

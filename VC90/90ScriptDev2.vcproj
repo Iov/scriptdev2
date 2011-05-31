@@ -404,6 +404,14 @@
 				RelativePath="..\base\pet_ai.h"
 				>
 			</File>
+			<File
+				RelativePath="..\base\simple_ai.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\base\simple_ai.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="scripts"
@@ -415,6 +423,30 @@
 					RelativePath="..\scripts\battlegrounds\battleground.cpp"
 					>
 				</File>
+                <File
+					RelativePath="..\scripts\battlegrounds\battlegroundSA.cpp"
+					>
+                </File>
+				<Filter
+					Name="alterac_valley"
+					>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_balinda.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_drekthar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_galvangar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\scripts\battlegrounds\alterac_valley\boss_vanndar.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="custom"
@@ -425,6 +457,22 @@
 				</File>
 				<File
 					RelativePath="..\scripts\custom\teleguy.cpp"
+					>
+				</File>
+ 				<File
+					RelativePath="..\scripts\custom\custom_gameobjects.cpp"
+					>
+				</File>
+ 				<File
+					RelativePath="..\scripts\custom\custom_items.cpp"
+					>
+				</File>
+ 				<File
+					RelativePath="..\scripts\custom\custom_npcs.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\custom\vip_master.cpp"
 					>
 				</File>
 			</Filter>
@@ -2042,6 +2090,14 @@
 							>
 						</File>
 						<File
+							RelativePath="..\scripts\northrend\nexus\nexus\commander_kolurg.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\scripts\northrend\nexus\nexus\commander_stoutbeard.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\scripts\northrend\nexus\nexus\instance_nexus.cpp"
 							>
 						</File>
@@ -3059,78 +3115,83 @@
 					RelativePath="..\scripts\world\spell_scripts.cpp"
 					>
 				</File>
-			</Filter>
+				<File
+					RelativePath="..\scripts\world\go_scripts.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\world\guards.cpp"
+					>
+					
+				</File>
+				<File
+					RelativePath="..\scripts\world\worldmap_eastern_kingdoms.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\world\worldmap_eastern_kingdoms.h"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\world\worldmap_kalimdor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\world\worldmap_kalimdor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\world\worldmap_northrend.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\world\worldmap_northrend.h" 
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\world\worldmap_outland.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\scripts\world\worldmap_outland.h"
+					>
+				</File>
+            </Filter>
 			<Filter
-				Name="outdoor_pvp"
+				Name="guards"
 				>
 				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_eastern_kingdoms.cpp"
+					RelativePath="..\scripts\guards\ancient_of_war.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_eastern_kingdoms.h"
+					RelativePath="..\scripts\guards\archbishop_benedictus.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_kalimdor.cpp"
+					RelativePath="..\scripts\guards\g_marcus_jonathan.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_kalimdor.h"
+					RelativePath="..\scripts\guards\high_fire_mage.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_northrend.cpp"
+					RelativePath="..\scripts\guards\high_sorcerer_andromath.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_northrend.h"
+					RelativePath="..\scripts\guards\highlord_bolvar_fordragon.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_outland.cpp"
+					RelativePath="..\scripts\guards\officers.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_outland.h"
+					RelativePath="..\scripts\guards\overlord_saurfang.cpp"
 					>
 				</File>
-				<File
-					RelativePath="..\scripts\outdoor_pvp\outdoor_pvp_zone_selector.h"
-					>
-				</File>
-				<Filter
-					Name="eastern_kingdoms"
-					>
-					<File
-						RelativePath="..\scripts\outdoor_pvp\eastern_kingdoms\outdoor_pvp_eastern_plaguelands.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\scripts\outdoor_pvp\eastern_kingdoms\outdoor_pvp_eastern_plaguelands.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="kalimdor"
-					>
-					<File
-						RelativePath="..\scripts\outdoor_pvp\kalimdor\outdoor_pvp_silithus.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\scripts\outdoor_pvp\kalimdor\outdoor_pvp_silithus.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="outland"
-					>
-				</Filter>
-				<Filter
-					Name="northrend"
-					>
-				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -3202,14 +3263,6 @@
 			</File>
 			<File
 				RelativePath="..\include\sc_instance.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\sc_outdoor_pvp.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\sc_outdoor_pvp.h"
 				>
 			</File>
 		</Filter>

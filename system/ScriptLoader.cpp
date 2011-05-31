@@ -8,20 +8,29 @@
 extern void AddSC_battleground();
 extern void AddSC_battlegroundSA();
 
+//alterac_valley
+extern void AddSC_boss_balinda();
+extern void AddSC_boss_drekthar();
+extern void AddSC_boss_galvangar();
+extern void AddSC_boss_vanndar();
+
+//Specialized Guards and world leader guards
+extern void AddSC_ancient_of_war();
+extern void AddSC_high_fire_mage();
+extern void AddSC_archbishop_benedictus();
+extern void AddSC_g_marcus_jonathan();
+extern void AddSC_high_sorcerer_andromath();
+extern void AddSC_highlord_bolvar_fordragon();
+extern void AddSC_city_officer();
+extern void AddSC_overlord_saurfang();
+
 //custom
+extern void AddSC_custom_gameobjects();
+extern void AddSC_custom_items();
+extern void AddSC_custom_npcs();
 extern void AddSC_npc_arena_honor();
 extern void AddSC_mob_teleguy();
 extern void AddSC_vip_master();
-
-// OutdoorPvP
-extern void AddSC_outdoor_pvp_eastern_kingdoms();
-extern void AddSC_outdoor_pvp_kalimdor();
-extern void AddSC_outdoor_pvp_northrend();
-extern void AddSC_outdoor_pvp_outland();
-
-// OutdoorPvP zone scripts
-extern void AddSC_outdoor_pvp_eastern_plaguelands();
-extern void AddSC_outdoor_pvp_silithus();
 
 //examples
 extern void AddSC_example_creature();
@@ -39,6 +48,9 @@ extern void AddSC_item_scripts();
 extern void AddSC_npc_professions();
 extern void AddSC_npcs_special();
 extern void AddSC_spell_scripts();
+extern void AddSC_worldmap_eastern_kingdoms();
+extern void AddSC_worldmap_kalimdor();
+extern void AddSC_worldmap_outland();
 
 //eastern kingdoms
 extern void AddSC_blackrock_depths();                       //blackrock_depths
@@ -145,6 +157,9 @@ extern void AddSC_stratholme();
 extern void AddSC_instance_sunken_temple();                 //sunken_temple
 extern void AddSC_sunken_temple();
 extern void AddSC_boss_brutallus();                         //sunwell_plateau
+extern void AddSC_boss_felmyst();
+extern void AddSC_boss_muru_entropius();
+extern void AddSC_boss_kiljaeden();
 extern void AddSC_boss_kalecgos();
 extern void AddSC_instance_sunwell_plateau();
 extern void AddSC_boss_archaedas();                         //uldaman
@@ -349,6 +364,8 @@ extern void AddSC_boss_anomalus();                          //nexus
 extern void AddSC_boss_keristrasza();
 extern void AddSC_boss_ormorok();
 extern void AddSC_boss_telestra();
+extern void AddSC_boss_commander_kolurg();
+extern void AddSC_boss_commander_stoutbeard();
 extern void AddSC_instance_nexus();
 
 extern void AddSC_oculus();                                 //Oculus
@@ -545,21 +562,29 @@ void AddScripts()
     AddSC_battleground();
 	AddSC_battlegroundSA();
 
+    //alterac_valley
+    AddSC_boss_balinda();
+    AddSC_boss_drekthar();
+    AddSC_boss_galvangar();
+    AddSC_boss_vanndar();
+
     //custom
+    AddSC_custom_gameobjects();
+    AddSC_custom_items();
+    AddSC_custom_npcs();
     AddSC_npc_arena_honor();
     AddSC_mob_teleguy();
     AddSC_vip_master();
-    
-    // OutdoorPvP zone scripts
-    // Must be _before_ map scripts call!
-    AddSC_outdoor_pvp_eastern_plaguelands();
-    AddSC_outdoor_pvp_silithus();
 
-    // OutdoorPvP
-    AddSC_outdoor_pvp_eastern_kingdoms();
-    AddSC_outdoor_pvp_kalimdor();
-    AddSC_outdoor_pvp_northrend();
-    AddSC_outdoor_pvp_outland();
+    //Specialized Guards and world leader guards
+    AddSC_ancient_of_war();
+    AddSC_high_fire_mage();
+    AddSC_archbishop_benedictus();
+    AddSC_g_marcus_jonathan();
+    AddSC_high_sorcerer_andromath();
+    AddSC_highlord_bolvar_fordragon();
+    AddSC_city_officer();
+    AddSC_overlord_saurfang();
 
     //examples
     AddSC_example_creature();
@@ -577,6 +602,9 @@ void AddScripts()
     AddSC_npc_professions();
     AddSC_npcs_special();
     AddSC_spell_scripts();
+    AddSC_worldmap_eastern_kingdoms();
+    AddSC_worldmap_kalimdor();
+    AddSC_worldmap_outland();
 
     //eastern kingdoms
     AddSC_blackrock_depths();                               //blackrock_depths
@@ -875,6 +903,8 @@ void AddScripts()
     AddSC_boss_keristrasza();
     AddSC_boss_ormorok();
     AddSC_boss_telestra();
+    AddSC_boss_commander_kolurg();
+    AddSC_boss_commander_stoutbeard();
     AddSC_instance_nexus();
 
     AddSC_oculus();                                         //Oculus
