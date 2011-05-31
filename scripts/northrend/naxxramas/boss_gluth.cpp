@@ -131,21 +131,7 @@ struct MANGOS_DLL_DECL boss_gluthAI : public ScriptedAI
         // Decimate
         if (m_uiDecimateTimer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_DECIMATE); // spell not workin, visual effect only
-            //workaround
-            std::list<HostileReference*> t_list = m_creature->getThreatManager().getThreatList();
-            if (t_list.size())
-            {
-                //begin + 1 , so we don't target the one with the highest threat
-                std::list<HostileReference*>::iterator itr = t_list.begin();
-                std::advance(itr, 1);
-                for(; itr!= t_list.end(); ++itr)
-                {
-                    Unit *target = m_creature->GetMap()->GetUnit((*itr)->getUnitGuid());
-                    if (target && target->isAlive() && target->GetTypeId() == TYPEID_PLAYER && (target->GetHealth() > target->GetMaxHealth() * 0.05))
-                        target->SetHealth(target->GetMaxHealth() * 0.05); // decrease player hp to 5% of max hp
-                }
-            }
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_DECIMATE); 
             // Move Zombies
             if (!m_lZombieGUIDList.empty())
             {
