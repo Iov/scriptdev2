@@ -131,3 +131,15 @@ UPDATE `creature_template` SET `ScriptName`='npc_harnessed_icemaw_matriarch', `f
 -- Quest Ambush at the Overlook
 
 UPDATE `creature_template` SET `ScriptName`='mob_scarlet_courier' WHERE `entry`='29076';
+
+-- Instance Forge of Souls
+
+UPDATE `creature_template` SET `ScriptName`='npc_corrupted_soul_fragment' WHERE `entry`='36535';
+
+-- Quest The Might of the Horde
+
+UPDATE `creature_template` SET `ScriptName`='npc_warsong_battle_standart' WHERE `entry`='26678';
+
+-- Quests Reunited and Dark Horizon
+
+UPDATE `creature_template` SET `ScriptName`='npc_flying_fiend_vehicle', `InhabitType`='4' WHERE `entry`='28669';

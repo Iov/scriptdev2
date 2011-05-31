@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Dragonblight
 SD%Complete: 100
-SDComment: Quest support: 12166, 12261, 12499/12500(end sequenze). Taxi paths Wyrmrest temple.
+SDComment: Quest support: 12053, 12166, 12261, 12499/12500(end sequenze). Taxi paths Wyrmrest temple.
 SDCategory: Dragonblight
 EndScriptData */
 
@@ -27,6 +27,7 @@ npc_alexstrasza_wr_gate
 npc_destructive_ward
 npc_tariolstrasz
 npc_torastrasza
+npc_warsong_battle_standart
 EndContentData */
 
 #include "precompiled.h"
@@ -329,7 +330,7 @@ bool GossipSelect_npc_torastrasza(Player* pPlayer, Creature* pCreature, uint32 u
 /*######
 ## npc_hourglass_of_eternity
 ######*/
-/*Support for 'Future you' is currently missing*/ 
+/*Support for 'Future you' is currently missing*/
 enum
 {
     NPC_INFINITE_CHRONO_MAGUS    = 27898,
@@ -343,7 +344,7 @@ enum
 struct MANGOS_DLL_DECL npc_hourglassAI : public ScriptedAI
 {
     npc_hourglassAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
-   
+
     uint64 uiWaveTimer;
     uint32 uiWaveCounter;
 
@@ -356,7 +357,7 @@ struct MANGOS_DLL_DECL npc_hourglassAI : public ScriptedAI
      void JustSummoned(Creature* pSummoned)
      {
          pSummoned->AI()->AttackStart(m_creature);
-     }  
+     }
 
      void JustDied(Unit* pKiller)
      {
@@ -386,7 +387,7 @@ struct MANGOS_DLL_DECL npc_hourglassAI : public ScriptedAI
                     break;
             case 4: m_creature->SummonCreature(NPC_INFINITE_TIMERENDER, m_creature->GetPositionX()+5,m_creature->GetPositionY(),m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000);
                     break;
- 
+
          }
      }
      void UpdateAI(const uint32 uiDiff)
@@ -400,7 +401,7 @@ struct MANGOS_DLL_DECL npc_hourglassAI : public ScriptedAI
                     uiWaveCounter++;
                 }
                 else m_creature->ForcedDespawn();
- 
+
             } else uiWaveTimer -= uiDiff;
      }
 };
@@ -408,6 +409,90 @@ struct MANGOS_DLL_DECL npc_hourglassAI : public ScriptedAI
 CreatureAI* GetAI_npc_hourglass(Creature* pCreature)
 {
     return new npc_hourglassAI(pCreature);
+}
+
+/*#####
+## npc_warsong_battle_standart
+######*/
+
+enum
+{
+    SPELL_SUMMON_ANUBAR_INVADER     = 47303,
+    QUEST_THE_MIGHT_OF_THE_HORDE    = 12053,
+    SAY_PLAYER_PLANTED_STANDARD     = -1999888,
+    SAY_EMOTE_STANDARD_DESTROYED    = -1999889,
+    SAY_INVIDER_DESTROYED_STANDARD  = -1999890
+};
+
+struct MANGOS_DLL_DECL npc_warsong_battle_standartAI : public Scripted_NoMovementAI
+{
+    npc_warsong_battle_standartAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature)
+    {
+        m_uiCycle = 0;
+        Reset();
+    }
+
+    uint8 m_uiCycle;
+    uint32 m_uiSummonTimer;
+    void Reset()
+    {
+        m_uiSummonTimer = 5000;
+    }
+
+    void JustSummoned(Creature* pSummoned)
+    {
+        if (pSummoned->IsHostileTo(m_creature))
+            pSummoned->AI()->AttackStart(m_creature);
+    }
+
+    void JustDied(Unit* pKiller)
+    {
+        DoScriptText(SAY_INVIDER_DESTROYED_STANDARD, pKiller);
+        DoScriptText(SAY_EMOTE_STANDARD_DESTROYED, m_creature);
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (m_uiSummonTimer < uiDiff)
+        {
+            switch (m_uiCycle)
+            {
+                case 0:
+                    if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_creature->GetCreatorGuid()))
+                        DoScriptText(SAY_PLAYER_PLANTED_STANDARD, pPlayer);
+                    break;
+                case 1:
+                    DoCastSpellIfCan(m_creature, SPELL_SUMMON_ANUBAR_INVADER, CAST_TRIGGERED);
+                    break;
+                case 2:
+                    DoCastSpellIfCan(m_creature, SPELL_SUMMON_ANUBAR_INVADER, CAST_TRIGGERED);
+                    DoCastSpellIfCan(m_creature, SPELL_SUMMON_ANUBAR_INVADER, CAST_TRIGGERED);
+                    break;
+                case 3:
+                    DoCastSpellIfCan(m_creature, SPELL_SUMMON_ANUBAR_INVADER, CAST_TRIGGERED);
+                    break;
+                case 4:
+                    DoCastSpellIfCan(m_creature, SPELL_SUMMON_ANUBAR_INVADER, CAST_TRIGGERED);
+                    DoCastSpellIfCan(m_creature, SPELL_SUMMON_ANUBAR_INVADER, CAST_TRIGGERED);
+                    DoCastSpellIfCan(m_creature, SPELL_SUMMON_ANUBAR_INVADER, CAST_TRIGGERED);
+                    break;
+                case 5:
+                    if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_creature->GetCreatorGuid()))
+                        pPlayer->GroupEventHappens(QUEST_THE_MIGHT_OF_THE_HORDE, m_creature);
+                    m_creature->ForcedDespawn(5000);
+                return;
+            }
+            ++m_uiCycle;
+            m_uiSummonTimer = 10000;
+        }
+        else
+            m_uiSummonTimer -= uiDiff;
+    }
+};
+
+CreatureAI* GetAI_npc_warsong_battle_standart(Creature* pCreature)
+{
+    return new npc_warsong_battle_standartAI(pCreature);
 }
 
 void AddSC_dragonblight()
@@ -442,9 +527,14 @@ void AddSC_dragonblight()
     pNewScript->pGossipHello = &GossipHello_npc_torastrasza;
     pNewScript->pGossipSelect = &GossipSelect_npc_torastrasza;
     pNewScript->RegisterSelf();
-	
+
     pNewScript = new Script;
     pNewScript->Name = "npc_hourglass";
     pNewScript->GetAI = &GetAI_npc_hourglass;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_warsong_battle_standart";
+    pNewScript->GetAI = &GetAI_npc_warsong_battle_standart;
     pNewScript->RegisterSelf();
 }
