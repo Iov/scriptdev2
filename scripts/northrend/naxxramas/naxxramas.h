@@ -10,6 +10,7 @@ enum
     MAX_ENCOUNTER               = 16,
 
     // Kel'Thuzad's taunts after killing Wing Bosses
+    SAY_KELTHUZAD_CAT_DIED      = -1533089,
     SAY_KELTHUZAD_TAUNT1        = -1533090,
     SAY_KELTHUZAD_TAUNT2        = -1533091,
     SAY_KELTHUZAD_TAUNT3        = -1533092,
@@ -65,6 +66,7 @@ enum
     NPC_RIVENDARE               = 30549,
 
     NPC_KELTHUZAD               = 15990,
+    NPC_MR_BIGGLESWORTH         = 16998,
 
     // Faerlina
     NPC_NAXXRAMAS_FOLLOWER      = 16505,
@@ -194,6 +196,7 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         void OnObjectCreate(GameObject* pGo);
 
         void OnPlayerDeath(Player* pPlayer);
+        void OnCreatureDeath(Creature* pCreature);
 
         void SetData(uint32 uiType, uint32 uiData);
         uint32 GetData(uint32 uiType);
