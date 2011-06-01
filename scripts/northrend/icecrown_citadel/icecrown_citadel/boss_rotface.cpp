@@ -333,9 +333,7 @@ struct MANGOS_DLL_DECL mob_big_oozeAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    bool m_bExploded;
     uint32 m_uiStickyOozeTimer;
-    uint32 m_uiExplodeTimer;
 
     void Reset()
     {
@@ -344,9 +342,7 @@ struct MANGOS_DLL_DECL mob_big_oozeAI : public ScriptedAI
         m_creature->SetSpeedRate(MOVE_RUN, 0.5);
         m_creature->SetSpeedRate(MOVE_WALK, 0.5);
 
-        m_bExploded = false;
         m_uiStickyOozeTimer = 5*IN_MILLISECONDS;
-        m_uiExplodeTimer = 0;
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -356,6 +352,12 @@ struct MANGOS_DLL_DECL mob_big_oozeAI : public ScriptedAI
 
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+        if (m_creature->HasAura(SPELL_UNSTABLE_OOZE_AURA))
+        {
+            if (m_creature->GetAura(SPELL_UNSTABLE_OOZE_AURA, EFFECT_INDEX_0)->GetStackAmount() > 4)
+                DoCast(m_creature, SPELL_OOZE_EXPLODE);
+        }
 
         if (m_uiStickyOozeTimer < uiDiff)
         {
@@ -376,26 +378,6 @@ struct MANGOS_DLL_DECL mob_big_oozeAI : public ScriptedAI
         {
             pBig->ForcedDespawn();
             DoCast(m_creature, SPELL_UNSTABLE_OOZE);
-        }
-
-        if (!m_bExploded)
-        {
-            if (m_creature->HasAura(SPELL_UNSTABLE_OOZE_AURA))
-            {
-                if (m_creature->GetAura(SPELL_UNSTABLE_OOZE_AURA, EFFECT_INDEX_0)->GetStackAmount() > 4)
-                {
-                    DoCast(m_creature, SPELL_OOZE_EXPLODE);
-                    m_bExploded = true;
-                    m_uiExplodeTimer = 4*IN_MILLISECONDS;
-                }
-            }
-        }
-        else
-        {
-            if (m_uiExplodeTimer < uiDiff)
-                m_creature->ForcedDespawn();
-            else
-                m_uiExplodeTimer -= uiDiff;
         }
     }
 };
