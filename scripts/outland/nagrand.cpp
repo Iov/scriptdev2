@@ -102,6 +102,8 @@ struct MANGOS_DLL_DECL mob_lumpAI : public ScriptedAI
                 m_creature->RemoveAllAuras();
                 m_creature->DeleteThreatList();
                 m_creature->CombatStop(true);
+                m_creature->AttackStop();
+                m_creature->InterruptNonMeleeSpells(false);
 
                 // should get unit_flags UNIT_FLAG_OOC_NOT_ATTACKABLE | UNIT_FLAG_PASSIVE at faction change, but unclear why/for what reason, skipped (no flags expected as default)
                 m_creature->setFaction(FACTION_FRIENDLY);
