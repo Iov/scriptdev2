@@ -412,13 +412,11 @@ struct MANGOS_DLL_DECL boss_hodirAI : public ScriptedAI
 
     // for debug only
     void JustDied(Unit* pKiller)
-    {/*
+    {
         if(m_pInstance) 
         {
             m_pInstance->SetData(TYPE_HODIR, DONE);
-            if(m_uiSpeedKillTimer > 0)
-                m_pInstance->SetData(TYPE_HODIR_HARD, DONE);
-        }*/
+        }
     }
 
     void DamageTaken(Unit *done_by, uint32 &uiDamage)
