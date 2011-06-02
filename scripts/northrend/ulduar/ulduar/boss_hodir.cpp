@@ -416,8 +416,6 @@ struct MANGOS_DLL_DECL boss_hodirAI : public ScriptedAI
         if(m_pInstance) 
         {
             m_pInstance->SetData(TYPE_HODIR, DONE);
-            if(m_uiSpeedKillTimer > 0)
-                m_pInstance->SetData(TYPE_HODIR_HARD, DONE);
         }
     }
 
