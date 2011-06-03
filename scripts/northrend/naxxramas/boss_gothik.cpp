@@ -92,7 +92,7 @@ struct MANGOS_DLL_DECL boss_gothikAI : public ScriptedAI
     uint32 m_uiTeleportTimer;
     uint32 m_uiShadowboltTimer;
 
-    std::set<uint64> m_lDeadsideAdds;
+    GUIDList m_lDeadsideAdds;
 
     void Reset()
     {
@@ -232,7 +232,7 @@ struct MANGOS_DLL_DECL boss_gothikAI : public ScriptedAI
         else
         {
             pSummoned->SetInCombatWithZone();
-            m_lDeadsideAdds.insert(pSummoned->GetGUID());
+            m_lDeadsideAdds.push_back(pSummoned->GetGUID());
             // prevent Deadside Adds to enter live side before combat gate is open, kind of hacky :-/
             if (!HasPlayersInLeftSide())
             {
@@ -331,7 +331,7 @@ struct MANGOS_DLL_DECL boss_gothikAI : public ScriptedAI
                     if (m_creature->GetHealthPercent() < 30.0f)
                     {
                         // reset speed of Deadside Adds upon opening combat gate
-                        for(std::set<uint64>::const_iterator itr = m_lDeadsideAdds.begin(); itr != m_lDeadsideAdds.end(); ++itr)
+                        for(GUIDList::const_iterator itr = m_lDeadsideAdds.begin(); itr != m_lDeadsideAdds.end(); ++itr)
                         {
                             if (Creature* pDeadsideAdds = m_pInstance->instance->GetCreature(*itr))
                             {
