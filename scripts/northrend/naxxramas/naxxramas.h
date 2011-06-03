@@ -14,7 +14,6 @@ enum
     SAY_KELTHUZAD_TAUNT2        = -1533091,
     SAY_KELTHUZAD_TAUNT3        = -1533092,
     SAY_KELTHUZAD_TAUNT4        = -1533093,
-    SAY_MR_BIGGLESWORTH         = -1533089,
 
     TYPE_ANUB_REKHAN            = 1,
     TYPE_FAERLINA               = 2,
@@ -66,7 +65,6 @@ enum
     NPC_RIVENDARE               = 30549,
 
     NPC_KELTHUZAD               = 15990,
-    NPC_BIGGLESWORTH            = 16998,
 
     // Faerlina
     NPC_NAXXRAMAS_FOLLOWER      = 16505,
@@ -194,7 +192,7 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
 
         void OnCreatureCreate(Creature* pCreature);
         void OnObjectCreate(GameObject* pGo);
-        void OnCreatureDeath(Creature* pCreature);
+
         void OnPlayerDeath(Player* pPlayer);
 
         void SetData(uint32 uiType, uint32 uiData);
@@ -220,7 +218,6 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         void SetChamberCenterCoords(float fX, float fY, float fZ);
         void GetChamberCenterCoords(float &fX, float &fY, float &fZ) { fX = m_fChamberCenterX; fY = m_fChamberCenterY; fZ = m_fChamberCenterZ; }
         void DoTaunt();
-        Creature* GetRealOrFakeKel(Unit* pUnit);
 
     protected:
         uint32 m_auiEncounter[MAX_ENCOUNTER];

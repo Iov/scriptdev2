@@ -123,15 +123,6 @@ void instance_naxxramas::OnCreatureCreate(Creature* pCreature)
     }
 }
 
-void instance_naxxramas::OnCreatureDeath(Creature* pCreature)
-{
-    if(pCreature->GetEntry() == NPC_BIGGLESWORTH)
-    {
-        if(Creature* pKel = GetRealOrFakeKel(pCreature))
-            pKel->MonsterYellToZone(SAY_MR_BIGGLESWORTH,LANG_UNIVERSAL,0);
-    }
-}
-
 void instance_naxxramas::OnObjectCreate(GameObject* pGo)
 {
     switch(pGo->GetEntry())
@@ -308,8 +299,8 @@ void instance_naxxramas::OnPlayerDeath(Player* pPlayer)
         SetData(TYPE_UNDYING_FAILED, DONE);
 
     // not used, achievement handled in heigan script
-    //if (GetData(TYPE_HEIGAN) == IN_PROGRESS)
-    //    SetSpecialAchievementCriteria(TYPE_ACHIEV_SAFETY_DANCE, false);
+    // if (GetData(TYPE_HEIGAN) == IN_PROGRESS)
+    //      SetSpecialAchievementCriteria(TYPE_ACHIEV_SAFETY_DANCE, false);
 }
 
 bool instance_naxxramas::IsEncounterInProgress() const
@@ -756,7 +747,7 @@ void instance_naxxramas::SetChamberCenterCoords(float fX, float fY, float fZ)
 
 void instance_naxxramas::DoTaunt()
 {
-    Creature* pKelThuzad = GetRealOrFakeKel(instance->GetPlayers().begin()->getSource());
+    Creature* pKelThuzad = instance->GetCreature(m_uiKelthuzadGUID);
 
     if (pKelThuzad && pKelThuzad->isAlive())
     {
@@ -782,20 +773,6 @@ void instance_naxxramas::DoTaunt()
             case 4: DoScriptText(SAY_KELTHUZAD_TAUNT4, pKelThuzad); break;
         }
     }
-}
-
-Creature* instance_naxxramas::GetRealOrFakeKel(Unit* pUnit)
-{
-    Creature* pKel = instance->GetCreature(m_uiKelthuzadGUID);
-    if(!pKel && pUnit)
-        if(Creature* pFakeKel = pUnit->SummonCreature(NPC_KELTHUZAD,3004.28f,-3434.1f,293.89f,0,TEMPSUMMON_TIMED_DESPAWN,3000))
-        {
-            pFakeKel->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_NOT_SELECTABLE);
-            pFakeKel->setFaction(35);
-            pFakeKel->SetVisibility(VISIBILITY_OFF);
-            pKel = pFakeKel;
-        }
-    return pKel;
 }
 
 InstanceData* GetInstanceData_instance_naxxramas(Map* pMap)
