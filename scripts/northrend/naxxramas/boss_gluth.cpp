@@ -73,7 +73,7 @@ struct MANGOS_DLL_DECL boss_gluthAI : public ScriptedAI
 
     uint32 m_uiBerserkTimer;
 
-    std::list<uint64> m_lZombieGUIDList;
+    GUIDList m_lZombieGUIDList;
     uint32 m_uiRangeCheck_Timer;
 
     void Reset()
@@ -135,7 +135,7 @@ struct MANGOS_DLL_DECL boss_gluthAI : public ScriptedAI
             // Move Zombies
             if (!m_lZombieGUIDList.empty())
             {
-                for(std::list<uint64>::iterator itr = m_lZombieGUIDList.begin(); itr != m_lZombieGUIDList.end(); ++itr)
+                for(GUIDList::iterator itr = m_lZombieGUIDList.begin(); itr != m_lZombieGUIDList.end(); ++itr)
                     if (Creature* pTemp = (Creature*)m_creature->GetMap()->GetUnit( *itr))
                         if (pTemp->isAlive())
                         {
@@ -189,7 +189,7 @@ struct MANGOS_DLL_DECL boss_gluthAI : public ScriptedAI
         {
             if (!m_lZombieGUIDList.empty())
             {
-                for(std::list<uint64>::iterator itr = m_lZombieGUIDList.begin(); itr != m_lZombieGUIDList.end(); ++itr)
+                for(GUIDList::iterator itr = m_lZombieGUIDList.begin(); itr != m_lZombieGUIDList.end(); ++itr)
                     if (Creature* pTemp = (Creature*)m_creature->GetMap()->GetUnit( *itr))
                         if (pTemp->isAlive() && m_creature->IsWithinDistInMap(pTemp, ATTACK_DISTANCE))
                         {

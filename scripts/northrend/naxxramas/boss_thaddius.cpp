@@ -147,9 +147,9 @@ struct MANGOS_DLL_DECL boss_thaddiusAI : public ScriptedAI
         if(m_pInstance)
         {
             m_pInstance->SetData(TYPE_THADDIUS, FAIL);
-            if(Creature* pFeugen = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_FEUGEN)))
+            if(Creature* pFeugen = m_pInstance->GetSingleCreatureFromStorage(NPC_FEUGEN))
                 pFeugen->Respawn();
-            if(Creature* pStalagg = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_STALAGG)))
+            if(Creature* pStalagg = m_pInstance->GetSingleCreatureFromStorage(NPC_STALAGG))
                 pStalagg->Respawn();
         }
     }
@@ -293,7 +293,7 @@ struct MANGOS_DLL_DECL boss_feugenAI : public ScriptedAI
         m_bStalaggDead = false;
 
         if (m_pInstance)
-            if (GameObject* pTesla = m_creature->GetMap()->GetGameObject(m_pInstance->GetData64(GO_TESLA_COIL_FEUGEN)))
+            if (GameObject* pTesla = m_pInstance->GetSingleGameObjectFromStorage(GO_TESLA_COIL_FEUGEN))
             {
                 if (pTesla->GetGoState() == GO_STATE_ACTIVE)
                     pTesla->SetGoState(GO_STATE_READY);
@@ -305,7 +305,7 @@ struct MANGOS_DLL_DECL boss_feugenAI : public ScriptedAI
         DoScriptText(SAY_FEUG_DEATH,m_creature);
 
         if(m_pInstance)
-            if(Creature* pStalagg = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_STALAGG)))
+            if(Creature* pStalagg = m_pInstance->GetSingleCreatureFromStorage(NPC_STALAGG))
                 if(!pStalagg->isAlive())
                     m_pInstance->SetData(TYPE_THADDIUS, SPECIAL);
     }
@@ -337,7 +337,7 @@ struct MANGOS_DLL_DECL boss_feugenAI : public ScriptedAI
 
         if (m_uiDeathTimer < uiDiff) // check death of stalagg
         {
-            if(Creature* pStalagg = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_STALAGG)))
+            if(Creature* pStalagg = m_pInstance->GetSingleCreatureFromStorage(NPC_STALAGG))
                 if (m_bStalaggDead)
                 {
                     pStalagg->Respawn(); // maybe there is a better way, respawn does move him start position
@@ -359,7 +359,7 @@ struct MANGOS_DLL_DECL boss_feugenAI : public ScriptedAI
             if(m_pInstance->GetData(TYPE_THADDIUS) == IN_PROGRESS) // prevent bosses from being killed separately
                 if(m_uiAggroTimer < uiDiff)
                 {
-                    if(Creature* pStalagg = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_STALAGG)))
+                    if(Creature* pStalagg = m_pInstance->GetSingleCreatureFromStorage(NPC_STALAGG))
                         if(pStalagg->getVictim()) 
                         {
                             m_creature->Attack(pStalagg->getVictim(),true);
@@ -389,7 +389,7 @@ struct MANGOS_DLL_DECL boss_feugenAI : public ScriptedAI
                     }
             }
             else
-                if (GameObject* pTesla = m_creature->GetMap()->GetGameObject(m_pInstance->GetData64(GO_TESLA_COIL_FEUGEN)))
+                if (GameObject* pTesla = m_pInstance->GetSingleGameObjectFromStorage(GO_TESLA_COIL_FEUGEN))
                     if (m_creature->GetDistance(pTesla) > 63.5f)
                     {
                         pTesla->UseDoorOrButton();
@@ -450,7 +450,7 @@ struct MANGOS_DLL_DECL boss_stalaggAI : public ScriptedAI
         m_uiCheckDistanceTimer = 1000;
 
         if (m_pInstance)
-            if (GameObject* pTesla = m_creature->GetMap()->GetGameObject(m_pInstance->GetData64(GO_TESLA_COIL_STALAGG)))
+            if (GameObject* pTesla = m_pInstance->GetSingleGameObjectFromStorage(GO_TESLA_COIL_STALAGG))
             {
                 if (pTesla->GetGoState() == GO_STATE_ACTIVE)
                     pTesla->SetGoState(GO_STATE_READY);
@@ -461,7 +461,7 @@ struct MANGOS_DLL_DECL boss_stalaggAI : public ScriptedAI
     {
         DoScriptText(SAY_STAL_DEATH,m_creature);
         if(m_pInstance)
-            if(Creature* pFeugen = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_FEUGEN)))
+            if(Creature* pFeugen = m_pInstance->GetSingleCreatureFromStorage(NPC_FEUGEN))
                 if(!pFeugen->isAlive())
                     m_pInstance->SetData(TYPE_THADDIUS, SPECIAL);
     }
@@ -494,7 +494,7 @@ struct MANGOS_DLL_DECL boss_stalaggAI : public ScriptedAI
 
         if (m_uiDeathTimer < uiDiff) // check death of stalagg
         {
-            if(Creature* pFeugen = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_FEUGEN)))
+            if(Creature* pFeugen = m_pInstance->GetSingleCreatureFromStorage(NPC_FEUGEN))
                 if (m_bFeugenDead)
                 {
                     pFeugen->Respawn(); // maybe there is a better way, respawn does move him start position
@@ -516,7 +516,7 @@ struct MANGOS_DLL_DECL boss_stalaggAI : public ScriptedAI
             if(m_pInstance->GetData(TYPE_THADDIUS) == IN_PROGRESS) // prevent bosses from being killed separately
                 if(m_uiAggroTimer < uiDiff)
                 {
-                    if(Creature* pFeugen = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_FEUGEN)))
+                    if(Creature* pFeugen = m_pInstance->GetSingleCreatureFromStorage(NPC_FEUGEN))
                         if(pFeugen->getVictim()) 
                         {
                             m_creature->Attack(pFeugen->getVictim(),true);
@@ -546,7 +546,7 @@ struct MANGOS_DLL_DECL boss_stalaggAI : public ScriptedAI
                     }
             }
             else
-                if (GameObject* pTesla = m_creature->GetMap()->GetGameObject(m_pInstance->GetData64(GO_TESLA_COIL_STALAGG)))
+                if (GameObject* pTesla = m_pInstance->GetSingleGameObjectFromStorage(GO_TESLA_COIL_STALAGG))
                     if (m_creature->GetDistance(pTesla) > 63.5f)
                     {
                         pTesla->UseDoorOrButton();
@@ -568,7 +568,7 @@ struct MANGOS_DLL_DECL boss_stalaggAI : public ScriptedAI
 
         if (m_uiMagneticPullTimer < uiDiff)
         {
-            if (Creature* pFeugen = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(NPC_FEUGEN))) // get Feugan
+            if (Creature* pFeugen = m_pInstance->GetSingleCreatureFromStorage(NPC_FEUGEN)) // get Feugan
                 if (pFeugen->isAlive())
                 {
                     Unit* pTargetFeugen = pFeugen->getVictim();

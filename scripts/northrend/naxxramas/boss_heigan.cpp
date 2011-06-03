@@ -76,7 +76,7 @@ struct MANGOS_DLL_DECL boss_heiganAI : public ScriptedAI
 
     uint32 m_uiEvadeCheckCooldown;
 
-    std::list<uint64> m_PlagueFissureGUID[4];
+    GUIDList m_PlagueFissureGUID[4];
 
     uint32 Disruption_Timer;
     uint32 Feaver_Timer;
@@ -315,7 +315,7 @@ struct MANGOS_DLL_DECL boss_heiganAI : public ScriptedAI
 
         if (Erupt_Timer < uiDiff)
         {
-            for (std::list<uint64>::iterator itr = m_PlagueFissureGUID[m_uiSafeSection].begin(); itr != m_PlagueFissureGUID[m_uiSafeSection].end(); ++itr)
+            for (GUIDList::iterator itr = m_PlagueFissureGUID[m_uiSafeSection].begin(); itr != m_PlagueFissureGUID[m_uiSafeSection].end(); ++itr)
             {
                 if (GameObject* pGo = m_creature->GetMap()->GetGameObject(*itr))
                     if (pGo)

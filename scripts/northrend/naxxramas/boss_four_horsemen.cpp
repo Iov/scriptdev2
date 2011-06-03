@@ -267,7 +267,7 @@ struct MANGOS_DLL_DECL boss_lady_blaumeuxAI : public ScriptedAI
 
             if(!tList.empty())
             {
-                std::list<uint64> lClosePlayerList;
+                GUIDList lClosePlayerList;
                 lClosePlayerList.clear();
 
                 for (ThreatList::const_iterator itr = tList.begin();itr != tList.end(); ++itr)
@@ -277,7 +277,7 @@ struct MANGOS_DLL_DECL boss_lady_blaumeuxAI : public ScriptedAI
 
                 if(!lClosePlayerList.empty())
                 {
-                    std::list<uint64>::iterator i = lClosePlayerList.begin();
+                    GUIDList::iterator i = lClosePlayerList.begin();
                     advance(i, (rand() % lClosePlayerList.size()));
                     if(Player* pTarget = m_creature->GetMap()->GetPlayer(*i))
                         DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_VOIDZONE : H_SPELL_VOIDZONE, CAST_TRIGGERED);
@@ -455,7 +455,7 @@ struct MANGOS_DLL_DECL boss_sir_zeliekAI : public ScriptedAI
             
             if(!tList.empty())
             {
-                std::list<uint64> lClosePlayerList;
+                GUIDList lClosePlayerList;
                 lClosePlayerList.clear();
 
                 for (ThreatList::const_iterator itr = tList.begin();itr != tList.end(); ++itr)
@@ -465,7 +465,7 @@ struct MANGOS_DLL_DECL boss_sir_zeliekAI : public ScriptedAI
 
                 if(!lClosePlayerList.empty())
                 {
-                    std::list<uint64>::iterator i = lClosePlayerList.begin();
+                    GUIDList::iterator i = lClosePlayerList.begin();
                     advance(i, (rand() % lClosePlayerList.size()));
                     if(Player* pTarget = m_creature->GetMap()->GetPlayer(*i))
                         DoCastSpellIfCan(pTarget, m_bIsRegularMode ? SPELL_HOLY_WRATH : H_SPELL_HOLY_WRATH, CAST_TRIGGERED);

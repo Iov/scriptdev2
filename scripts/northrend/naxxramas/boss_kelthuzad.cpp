@@ -151,9 +151,9 @@ struct MANGOS_DLL_DECL boss_kelthuzadAI : public ScriptedAI
     float m_fFissureX;
     float m_fFissureY;
 
-    std::set<uint64> m_lIntroMobsSet;
-    std::set<uint64> m_lAddsSet;
-    std::set<uint64> m_lChainsTargets;
+    GUIDSet m_lIntroMobsSet;
+    GUIDSet m_lAddsSet;
+    GUIDSet m_lChainsTargets;
 
     void Reset()
     {
@@ -211,7 +211,7 @@ struct MANGOS_DLL_DECL boss_kelthuzadAI : public ScriptedAI
 
         if (!m_lChainsTargets.empty()) // in case kelthuzad dies during chain spell
         {
-            for(std::set<uint64>::iterator itr = m_lChainsTargets.begin(); itr != m_lChainsTargets.end(); ++itr)
+            for(GUIDSet::iterator itr = m_lChainsTargets.begin(); itr != m_lChainsTargets.end(); ++itr)
                 if (Player* pPlayer = m_creature->GetMap()->GetPlayer(*itr))
                         pPlayer->SetClientControl(pPlayer, 1);
 
@@ -243,7 +243,7 @@ struct MANGOS_DLL_DECL boss_kelthuzadAI : public ScriptedAI
     {
         if (m_pInstance)
         {
-            for(std::set<uint64>::const_iterator itr = m_lIntroMobsSet.begin(); itr != m_lIntroMobsSet.end(); ++itr)
+            for(GUIDSet::const_iterator itr = m_lIntroMobsSet.begin(); itr != m_lIntroMobsSet.end(); ++itr)
             {
                 if (Creature* pCreature = m_pInstance->instance->GetCreature(*itr))
                     pCreature->ForcedDespawn();
@@ -257,7 +257,7 @@ struct MANGOS_DLL_DECL boss_kelthuzadAI : public ScriptedAI
     {
         if (m_pInstance)
         {
-            for(std::set<uint64>::const_iterator itr = m_lAddsSet.begin(); itr != m_lAddsSet.end(); ++itr)
+            for(GUIDSet::const_iterator itr = m_lAddsSet.begin(); itr != m_lAddsSet.end(); ++itr)
             {
                 if (Creature* pCreature = m_pInstance->instance->GetCreature(*itr))
                 {
@@ -661,7 +661,7 @@ struct MANGOS_DLL_DECL boss_kelthuzadAI : public ScriptedAI
                 {
                     if (m_uiChainsTargetsCastTimer < uiDiff)
                     {
-                        for (std::set<uint64>::iterator itr = m_lChainsTargets.begin(); itr != m_lChainsTargets.end(); ++itr)
+                        for (GUIDSet::iterator itr = m_lChainsTargets.begin(); itr != m_lChainsTargets.end(); ++itr)
                             if (Unit* pUnit = m_creature->GetMap()->GetUnit(*itr))
                             {
                                 if (pUnit->isDead())
@@ -738,7 +738,7 @@ struct MANGOS_DLL_DECL boss_kelthuzadAI : public ScriptedAI
 
                     if (m_uiChainsEndTimer < uiDiff)
                     {
-                        for(std::set<uint64>::iterator itr = m_lChainsTargets.begin(); itr != m_lChainsTargets.end(); ++itr)
+                        for(GUIDSet::iterator itr = m_lChainsTargets.begin(); itr != m_lChainsTargets.end(); ++itr)
                             if (Player* pPlayer = m_creature->GetMap()->GetPlayer(*itr))
                             {
                                 pPlayer->setFactionForRace(pPlayer->getRace());

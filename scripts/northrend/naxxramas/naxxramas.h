@@ -10,32 +10,33 @@ enum
     MAX_ENCOUNTER               = 16,
 
     // Kel'Thuzad's taunts after killing Wing Bosses
+    SAY_KELTHUZAD_CAT_DIED      = -1533089,
     SAY_KELTHUZAD_TAUNT1        = -1533090,
     SAY_KELTHUZAD_TAUNT2        = -1533091,
     SAY_KELTHUZAD_TAUNT3        = -1533092,
     SAY_KELTHUZAD_TAUNT4        = -1533093,
 
-    TYPE_ANUB_REKHAN            = 1,
-    TYPE_FAERLINA               = 2,
-    TYPE_MAEXXNA                = 3,
+    TYPE_ANUB_REKHAN            = 0,
+    TYPE_FAERLINA               = 1,
+    TYPE_MAEXXNA                = 2,
 
-    TYPE_NOTH                   = 4,
-    TYPE_HEIGAN                 = 5,
-    TYPE_LOATHEB                = 6,
+    TYPE_NOTH                   = 3,
+    TYPE_HEIGAN                 = 4,
+    TYPE_LOATHEB                = 5,
 
-    TYPE_RAZUVIOUS              = 7,
-    TYPE_GOTHIK                 = 8,
-    TYPE_FOUR_HORSEMEN          = 9,
+    TYPE_RAZUVIOUS              = 6,
+    TYPE_GOTHIK                 = 7,
+    TYPE_FOUR_HORSEMEN          = 8,
 
-    TYPE_PATCHWERK              = 10,
-    TYPE_GROBBULUS              = 11,
-    TYPE_GLUTH                  = 12,
-    TYPE_THADDIUS               = 13,
+    TYPE_PATCHWERK              = 9,
+    TYPE_GROBBULUS              = 10,
+    TYPE_GLUTH                  = 11,
+    TYPE_THADDIUS               = 12,
 
-    TYPE_SAPPHIRON              = 14,
-    TYPE_KELTHUZAD              = 15,
+    TYPE_SAPPHIRON              = 13,
+    TYPE_KELTHUZAD              = 14,
 
-    TYPE_UNDYING_FAILED         = 16,                       // Achievements Undying and Immortal, needs to be saved to database
+    TYPE_UNDYING_FAILED         = 15,                       // Achievements Undying and Immortal, needs to be saved to database
 
     MAX_HEIGAN_TRAP_AREAS       = 4,
     TYPE_MAX_HEIGAN_TRAPS_1     = 18,
@@ -65,6 +66,7 @@ enum
     NPC_RIVENDARE               = 30549,
 
     NPC_KELTHUZAD               = 15990,
+    NPC_MR_BIGGLESWORTH         = 16998,
 
     // Faerlina
     NPC_NAXXRAMAS_FOLLOWER      = 16505,
@@ -81,7 +83,7 @@ enum
     NPC_SPECT_RIDER             = 16150,
     NPC_SPECT_HORSE             = 16149,
 
-    // End boss adds
+    // Kel'Thuzad
     NPC_SOLDIER_FROZEN          = 16427,
     NPC_UNSTOPPABLE_ABOM        = 16428,
     NPC_SOUL_WEAVER             = 16429,
@@ -194,10 +196,10 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         void OnObjectCreate(GameObject* pGo);
 
         void OnPlayerDeath(Player* pPlayer);
+        void OnCreatureDeath(Creature* pCreature);
 
         void SetData(uint32 uiType, uint32 uiData);
         uint32 GetData(uint32 uiType);
-        uint64 GetData64(uint32 uiData);
 
         void SetSpecialAchievementCriteria(uint32 uiType, bool bIsMet);
         bool CheckAchievementCriteriaMeet(uint32 uiCriteriaId, Player const* pSource, Unit const* pTarget, uint32 uiMiscValue1 /* = 0*/);
@@ -260,14 +262,14 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         uint64 m_uiFaerWebGUID;
         uint64 m_uiMaexOuterGUID;
         uint64 m_uiMaexInnerGUID;
-        std::list<uint64> m_lFaerlinaAddGUIDs;
+        GUIDList m_lFaerlinaAddGUIDs;
 
         uint64 m_uiGothikGUID;
         uint64 m_uiGothCombatGateGUID;
         uint64 m_uiGothikEntryDoorGUID;
         uint64 m_uiGothikExitDoorGUID;
-        std::list<uint64> m_lGothTriggerList;
-        UNORDERED_MAP<uint64, GothTrigger> m_mGothTriggerMap;
+        GUIDList m_lGothTriggerList;
+        UNORDERED_MAP<ObjectGuid, GothTrigger> m_mGothTriggerMap;
 
         uint64 m_uiHorsemenDoorGUID;
         uint64 m_uiHorsemenChestGUID;
@@ -277,7 +279,7 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
         uint64 m_uiHeigEntryDoorGUID;
         uint64 m_uiHeigExitDoorGUID;
         uint64 m_uiLoathebDoorGUID;
-        std::vector<uint64> m_avuiHeiganTraps[MAX_HEIGAN_TRAP_AREAS];
+        GUIDVector m_avuiHeiganTraps[MAX_HEIGAN_TRAP_AREAS];
 
         uint64 m_uiSapphironBirthGUID;
         uint64 m_uiKelthuzadWindow1GUID;
@@ -287,7 +289,6 @@ class MANGOS_DLL_DECL instance_naxxramas : public ScriptedInstance
 
         uint64 m_uiKelthuzadDoorGUID;
         uint64 m_uiKelthuzadExitDoorGUID;
-
 
         float m_fChamberCenterX;
         float m_fChamberCenterY;
