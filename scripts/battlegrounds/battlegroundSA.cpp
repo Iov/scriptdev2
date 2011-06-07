@@ -21,6 +21,18 @@ struct MANGOS_DLL_DECL npc_sa_bombAI : public ScriptedAI
             m_creature->CastSpell(m_creature, 34602, true);
             m_creature->CastSpell(m_creature, 71495, true);
             m_creature->CastSpell(fx, fy, fz, Spell_Boom, true, 0, 0, m_creature->GetCharmerGuid());
+            // hackfix to damage the gate
+            MaNGOS::GameObjectInRangeCheck check(m_creature, fx, fy, fz, 10.0f);
+            std::list<GameObject*> goList;
+            MaNGOS::GameObjectListSearcher<MaNGOS::GameObjectInRangeCheck> searcher(goList, check);
+            Cell::VisitAllObjects(m_creature, searcher, 10.0f);
+            if (!goList.empty())
+            {
+                for (std::list<GameObject*>::const_iterator itr = goList.begin(); itr != goList.end(); ++itr)
+                {
+                    (*itr)->DamageTaken((Unit*)m_creature, 1250);
+                }
+            }
             m_creature->ForcedDespawn();
         } else event_bomb -= diff;
     }
