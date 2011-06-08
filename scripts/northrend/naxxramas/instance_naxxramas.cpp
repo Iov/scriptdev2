@@ -668,6 +668,7 @@ bool AreaTrigger_at_naxxramas(Player* pPlayer, AreaTriggerEntry const* pAt)
     }
 
 */
+    return true;
 }
 
 void AddSC_instance_naxxramas()
