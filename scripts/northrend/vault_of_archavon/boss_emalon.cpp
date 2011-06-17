@@ -92,7 +92,7 @@ struct MANGOS_DLL_DECL npc_tempest_minionAI : public ScriptedAI
     {
         m_creature->SetInCombatWithZone();
 
-        if (Creature* pEmalon = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(DATA_EMALON)))
+        if (Creature* pEmalon = m_pInstance->GetSingleCreatureFromStorage(NPC_EMALON))
             pEmalon->AI()->AttackStart(pWho);
     }
 
