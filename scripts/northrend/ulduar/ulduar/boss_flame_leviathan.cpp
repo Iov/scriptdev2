@@ -231,7 +231,7 @@ struct MANGOS_DLL_DECL boss_flame_leviathan : public ScriptedAI
         m_uiFlameVentsTimer     = 15000 + rand()%10000;
         m_uiMissileBarrageTimer = 1000;
         m_uiPursueTimer         = 30000;
-        m_uiGatheringSpeedTimer = 50000;
+        m_uiGatheringSpeedTimer = m_bIsRegularMode?50000:30000;
         m_uiSummonMechanoliftTimer    = 2000;
         m_uiMechanoliftCount    = 10;
 
@@ -452,7 +452,10 @@ struct MANGOS_DLL_DECL boss_flame_leviathan : public ScriptedAI
         if(m_uiGatheringSpeedTimer < uiDiff)
         {
             DoCast(m_creature, SPELL_GATHERING_SPEED);
-            m_uiGatheringSpeedTimer = urand(50000, 60000);
+            if(m_bIsRegularMode)
+                m_uiGatheringSpeedTimer = urand(50000, 60000);
+            else
+                m_uiGatheringSpeedTimer = urand(30000, 40000);
         }
         else 
             m_uiGatheringSpeedTimer -= uiDiff;
