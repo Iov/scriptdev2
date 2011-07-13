@@ -93,6 +93,14 @@ struct MANGOS_DLL_DECL boss_rimefangAI : public ScriptedAI
             pSummoned->CastSpell(pSummoned, SPELL_ICY_BLAST_AURA, false);
     }
 
+    void Aggro(Unit* pWho)
+    {
+        m_creature->SetInCombatWithZone();
+
+        if (Creature* pTyrannus = m_pInstance->GetSingleCreatureFromStorage(NPC_TYRANNUS))
+            pTyrannus->AI()->AttackStart(pWho);
+    }
+
     void UpdateAI(const uint32 uiDiff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -168,6 +176,11 @@ struct MANGOS_DLL_DECL boss_tyrannusAI : public ScriptedAI
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_TYRANNUS, IN_PROGRESS);
+
+        m_creature->SetInCombatWithZone();
+
+        if (Creature* pRimefang = m_pInstance->GetSingleCreatureFromStorage(NPC_RIMEFANG))
+            pRimefang->AI()->AttackStart(pWho);
 
         DoScriptText(SAY_AGGRO, m_creature);
     }
