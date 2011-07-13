@@ -62,7 +62,12 @@ struct MANGOS_DLL_DECL instance_trial_of_the_crusader : public BSWScriptedInstan
 
         m_auiNorthrendBeasts = NOT_STARTED;
         m_auiEventTimer = 1000;
-        m_auiCrusadersCount = 6;
+
+        if (Difficulty == RAID_DIFFICULTY_10MAN_NORMAL || Difficulty == RAID_DIFFICULTY_10MAN_HEROIC)
+            m_auiCrusadersCount = 6;
+        else
+            m_auiCrusadersCount = 10;
+
         needsave = false;
     }
 
