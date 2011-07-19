@@ -140,12 +140,6 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
     uint64 m_uiMimironHardLootGUID;
     uint64 m_uiAlagonLootGUID;
 
-    // towers
-    uint64 m_uiTowerOfFrostGUID;
-    uint64 m_uiTowerOfFlamesGUID;
-    uint64 m_uiTowerOfLifeGUID;
-    uint64 m_uiTowerOfStormsGUID;
-
     void Initialize()
     {
         memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
@@ -208,12 +202,6 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
         m_uiMimironLootGUID     = 0;
         m_uiMimironHardLootGUID = 0;
         m_uiAlagonLootGUID      = 0;
-
-        // towers
-        m_uiTowerOfFrostGUID    = 0;
-        m_uiTowerOfFlamesGUID   = 0;
-        m_uiTowerOfLifeGUID     = 0;
-        m_uiTowerOfStormsGUID   = 0;
 
         // doors
         // The siege
@@ -401,19 +389,6 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
     {
         switch(pGo->GetEntry())
         {
-            // towers
-        case GO_TOWER_OF_FROST:
-            m_uiTowerOfFrostGUID = pGo->GetGUID();
-            break;
-        case GO_TOWER_OF_FLAMES:
-            m_uiTowerOfFlamesGUID = pGo->GetGUID();
-            break;
-        case GO_TOWER_OF_LIFE:
-            m_uiTowerOfLifeGUID = pGo->GetGUID();
-            break;
-        case GO_TOWER_OF_STORMS:
-            m_uiTowerOfStormsGUID = pGo->GetGUID();
-            break;
             // doors & other
             // The siege
         case GO_SHIELD_WALL:
@@ -1020,15 +995,6 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
     {
         switch(uiData)
         {
-            // pre-leviathan towers
-        case GO_TOWER_OF_FROST:
-            return m_uiTowerOfFrostGUID;
-        case GO_TOWER_OF_FLAMES:
-            return m_uiTowerOfFlamesGUID;
-        case GO_TOWER_OF_LIFE:
-            return m_uiTowerOfLifeGUID;
-        case GO_TOWER_OF_STORMS:
-            return m_uiTowerOfStormsGUID;
             // Siege
         case NPC_LEVIATHAN:
             return m_uiLeviathanGUID;
@@ -1124,7 +1090,6 @@ struct MANGOS_DLL_DECL instance_ulduar : public ScriptedInstance
            case TYPE_XT002_HARD:
                break;
         }
-        return false;
     }
 
     uint32 GetData(uint32 uiType)
