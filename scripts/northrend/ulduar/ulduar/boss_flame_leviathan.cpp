@@ -144,9 +144,6 @@ struct MANGOS_DLL_DECL boss_flame_leviathan : public ScriptedAI
         m_uiMissileBarrageTimer = 1000;
         m_uiPursueTimer         = 30000;
         m_uiGatheringSpeedTimer = m_bIsRegularMode?50000:30000;
-        m_uiSummonMechanoliftTimer    = 2000;
-        m_uiMechanoliftCount    = 10;
-
         m_uiFreyaWardTimer      = 40000 + urand(1000, 10000);
         m_uiMimironInfernoTimer = 40000 + urand(1000, 10000);
         m_uiHodirFuryTimer      = 40000 + urand(1000, 10000);
