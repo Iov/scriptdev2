@@ -743,6 +743,7 @@
     <ClCompile Include="..\system\ScriptLoader.cpp" />
     <ClCompile Include="..\system\system.cpp" />
     <ClCompile Include="..\ScriptMgr.cpp" />
+    <ClCompile Include="zerspalter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\base\BSW_ai.h" />
