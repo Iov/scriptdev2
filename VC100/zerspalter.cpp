@@ -1,4 +1,130 @@
 #include "precompiled.h"
+#include "sc_gossip.h"
+
+
+#define GOSSIP_ITEM_ALLY "Wir sind fertig für den Kampf!"
+#define GOSSIP_ITEM_HORDE "Wir sind bereit uns in die Schlacht zu stürzen!"
+
+enum 
+{
+    QUEST_HORDE = 100003,
+    QUEST_ALLY  = 100002,
+    GOSSIP_TEXT_HORDE = 800001,
+    GOSSIP_TEXT_ALLY  = 800000,
+    SAY_HORDE_1 = -2000017,
+    SAY_HORDE_2 = -2000018,
+    SAY_HORDE_3 = -2000019,
+    SAY_ALLY_1 = -2000020,
+    SAY_ALLY_2 = -2000021,
+    SAY_ALLY_3 = -2000022,
+    NPC_ALLY   = 70015,
+    NPC_HORDE  = 70016,
+    NPC_BOSS   = 70010
+};
+
+struct MANGOS_DLL_DECL npc_eventhelperAI : public ScriptedAI
+{
+    npc_eventhelperAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    uint32 m_uiTimer;
+    bool m_bGossipPossible;
+    uint8 m_uiStep;
+    bool m_bIsAlliance;
+    ObjectGuid m_oPlayer;
+    ObjectGuid m_oBoss;
+
+    void Reset()
+    {
+        m_uiTimer = 500;
+        m_bGossipPossible = true;
+        m_uiStep = 4;
+        m_oPlayer = NULL;
+        m_bIsAlliance = m_creature->GetEntry() == NPC_ALLY;
+        m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (m_uiStep < 4)
+        {
+                if (m_uiStep < 3)
+                {
+                    if (m_uiTimer < uiDiff)
+                    {
+                        switch(m_uiStep)
+                        {
+                            case 0: DoScriptText(m_bIsAlliance?SAY_ALLY_1:SAY_HORDE_1,m_creature); break;
+                            case 1: DoScriptText(m_bIsAlliance?SAY_ALLY_2:SAY_HORDE_2,m_creature); break;
+                            case 2: DoScriptText(m_bIsAlliance?SAY_ALLY_3:SAY_HORDE_3,m_creature); break;
+                        }
+                        ++m_uiStep;
+                        m_uiTimer = 4500;
+                    }
+                } else if (m_uiStep == 3)
+                {
+                    if (Creature* pBoss = m_creature->GetClosestCreatureWithEntry(m_creature,NPC_BOSS,120.f))
+                    {
+                        m_oBoss = pBoss->GetObjectGuid();
+                        pBoss->setFaction(14);
+                        pBoss->SetVisibility(VISIBILITY_ON);
+                        if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_oPlayer))
+                        {
+                            pBoss->Attack(pPlayer, true);
+                            pBoss->GetMotionMaster()->MoveChase(pPlayer);
+                        }
+                        else
+                            pBoss->SetInCombatWithZone();
+                    }
+                    ++m_uiStep;
+                }
+            }
+    }
+};
+
+bool GossipHello_npc_eventhelper(Player* pPlayer, Creature* pCreature)
+{
+    bool m_bGossipPossible = false;
+
+    if (npc_eventhelperAI* pEventHelperAI = dynamic_cast<npc_eventhelperAI*>(pCreature->AI()))
+    {
+        m_bGossipPossible = pEventHelperAI->m_bGossipPossible;
+    }
+
+    if (!m_bGossipPossible)
+        return true;
+
+    if (pPlayer->HasQuest(QUEST_ALLY))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ALLY, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXT_ALLY, pCreature->GetObjectGuid());
+    }
+    else if (pPlayer->HasQuest(QUEST_HORDE))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_HORDE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXT_HORDE, pCreature->GetObjectGuid());
+    }
+
+    return true;
+}
+
+bool GossipSelect_npc_eventhelper(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+   if (uiAction == GOSSIP_ACTION_INFO_DEF+1)
+   {
+        pPlayer->CLOSE_GOSSIP_MENU();
+        pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+        if (npc_eventhelperAI* pEventHelperAI = dynamic_cast<npc_eventhelperAI*>(pCreature->AI()))
+        {
+            pEventHelperAI->m_oPlayer = pPlayer->GetObjectGuid();
+            pEventHelperAI->m_bGossipPossible = false;
+            pEventHelperAI->m_uiStep = 0;
+        }
+    }
+    return true;
+}
 
 enum
 {   
@@ -64,6 +190,7 @@ struct MANGOS_DLL_DECL boss_zerspalterAI : public ScriptedAI
     uint32 m_uiFuseLightningTimer;
     uint32 m_uiArcaneStormTimer;
     bool m_bIsPhase1;
+    ObjectGuid m_oEventHelperGuid;
 
     void Reset()
     {
@@ -83,6 +210,17 @@ struct MANGOS_DLL_DECL boss_zerspalterAI : public ScriptedAI
         m_uiFuseLightningTimer  = 20000; 
         m_uiArcaneStormTimer    = 10000; 
         m_bIsPhase1 = true;
+        m_oEventHelperGuid = NULL;
+
+        m_creature->setFaction(35);
+        m_creature->SetVisibility(VISIBILITY_OFF);
+
+        if (m_oEventHelperGuid)
+            if (Creature* pEventHelper = m_creature->GetMap()->GetCreature(m_oEventHelperGuid))
+                if (npc_eventhelperAI* pEventHelperAI = dynamic_cast<npc_eventhelperAI*>(pEventHelper->AI()))
+                {
+                    pEventHelperAI->m_bGossipPossible = true;
+                }
     }
 
     void Aggro()
@@ -100,6 +238,17 @@ struct MANGOS_DLL_DECL boss_zerspalterAI : public ScriptedAI
         }
     }
 
+    void JustRespawned()
+    {
+        if (Creature* pEventHelper = m_creature->GetMap()->GetCreature(m_oEventHelperGuid))
+        {
+            if (npc_eventhelperAI* pEventHelperAI = dynamic_cast<npc_eventhelperAI*>(pEventHelper->AI()))
+            {
+                pEventHelperAI->m_bGossipPossible = true;
+            }
+        }
+    }
+
     void JustDied(Unit* pKiller)
     {
         DoScriptText(SAY_DEATH,m_creature);
@@ -108,6 +257,15 @@ struct MANGOS_DLL_DECL boss_zerspalterAI : public ScriptedAI
     void JustReachedHome()
     {
         m_bIsPhase1 = true;
+        m_creature->setFaction(35);
+        m_creature->SetVisibility(VISIBILITY_OFF);
+        if (Creature* pEventHelper = m_creature->GetMap()->GetCreature(m_oEventHelperGuid))
+        {
+            if (npc_eventhelperAI* pEventHelperAI = dynamic_cast<npc_eventhelperAI*>(pEventHelper->AI()))
+            {
+                pEventHelperAI->m_bGossipPossible = true;
+            }
+        }
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -295,6 +453,11 @@ CreatureAI* GetAI_boss_zerspalter(Creature* pCreature)
     return new boss_zerspalterAI(pCreature);
 }
 
+CreatureAI* GetAI_npc_eventhelper(Creature* pCreature)
+{
+    return new npc_eventhelperAI(pCreature);
+}
+
 void AddSC_boss_zerspalter()
 {
     Script* pNewScript;
@@ -302,5 +465,12 @@ void AddSC_boss_zerspalter()
     pNewScript = new Script;
     pNewScript->Name = "boss_zerspalter";
     pNewScript->GetAI = &GetAI_boss_zerspalter;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_eventhelper";
+    pNewScript->GetAI = &GetAI_npc_eventhelper;
+    pNewScript->pGossipHello = &GossipHello_npc_eventhelper;
+    pNewScript->pGossipSelect = &GossipSelect_npc_eventhelper;
     pNewScript->RegisterSelf();
 }
