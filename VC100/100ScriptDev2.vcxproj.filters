@@ -2066,7 +2066,7 @@
       <Filter>scripts\kalimdor\razorfen_kraul</Filter>
     </ClCompile>
     <ClCompile Include="..\scripts\world\pet_scripts.cpp" />
-    <ClCompile Include="zerspalter.cpp">
+    <ClCompile Include="..\scripts\custom\zerspalter.cpp">
       <Filter>scripts\custom</Filter>
     </ClCompile>
   </ItemGroup>
